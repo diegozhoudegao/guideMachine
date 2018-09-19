@@ -36,7 +36,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	
 	public Object doSaveUser() {
 		User user = new User();
-		user.setName("zhouzhou");
+		user.setName("王菲王菲");
 		user.setState("0");
 		userDao.save(user);
 		return null;

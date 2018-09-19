@@ -17,6 +17,15 @@ spring:
       enabled: true
       max-file-size: 50MB
       max-request-size: 50MB
+  activemq: 
+    broker-url: tcp://192.168.1.5:61616
+    user: admin
+    password: admin
+    pool: 
+      enabled: true
+      max-connections: 50
+      expiry-timeout: 10000
+      idle-timeout: 30000
 server:
   port: 8086
 hibernate:

@@ -31,6 +31,15 @@
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<!-- ActiceMQ -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-activemq</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-pool</artifactId>
+		</dependency>
 		<dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -46,27 +55,6 @@
 			<artifactId>freemarker</artifactId>
 		</dependency>
 		
-		<!-- ant sql -->
-		<dependency>
-		    <groupId>org.apache.ant</groupId>
-		    <artifactId>ant</artifactId>
-		    <version>1.10.1</version>
-		</dependency>
-		<dependency>
-		  <groupId>com.github.qcloudsms</groupId>
-		  <artifactId>qcloudsms</artifactId>
-		  <version>1.0.2</version>
-		</dependency>
-		<dependency>
-		  <groupId>org.apache.httpcomponents</groupId>
-		  <artifactId>httpcore</artifactId>
-		  <version>4.4.9</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.apache.httpcomponents</groupId>
-		    <artifactId>httpmime</artifactId>
-		    <version>4.0.1</version>
-		</dependency>
 		<!-- 阿里开源数据源 -->
 		<dependency>
 			<groupId>com.alibaba</groupId>
