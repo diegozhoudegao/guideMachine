@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:tx="http://www.springframework.org/schema/tx" 
+    xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/task  
+						http://www.springframework.org/schema/task/spring-task-3.0.xsd
+						http://www.springframework.org/schema/tx
+						http://www.springframework.org/schema/tx/spring-tx.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop.xsd" default-autowire="byName">
+	<!-- 使Spring关注Annotation -->
+	<context:annotation-config />
+
+	<!-- 让Spring通过自动扫描来查询和管理Bean -->
+	<!-- 使用Annotation自动注册Bean，解决事务失效问题：在主容器中不扫描@Controller注解，在SpringMvc中只扫描@Controller注解。  -->
+<!--  	<context:component-scan base-package="com.wagon">base-package 如果多个，用“,”分隔 -->
+<!-- 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/> -->
+<!-- 	</context:component-scan> -->
+	
+	<!-- 导入jdbc.properties文件 -->  					
+	<context:property-placeholder ignore-unresolvable="true" location="classpath*:/application.yml"/>
+	<context:property-placeholder ignore-unresolvable="true" location="classpath*:/hibernate.properties"/>
+	
+	<!-- 数据源 -->
+	<!-- 配置c3p0连接池-->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		destroy-method="close">
+		<property name="driverClassName">
+			<value>${spring.datasource.driver-class-name}</value>
+		</property>
+		<property name="url">
+			<value>${spring.datasource.url}</value>
+		</property>
+		<property name="username">
+			<value>${spring.datasource.username}</value>
+		</property>
+		<property name="password">
+			<value>${spring.datasource.password}</value>
+		</property>
+	</bean>
+
+	<!-- 配置SessionFactory,由Spring容器来管理Hibernate -->
+	
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		
+		<!-- 扫描pojo -->
+		<property name="packagesToScan" value="com.cssiot.cssbase.*.*.entity, com.cssiot.cssutil.*.*.entity,com.cssiot.cssweb.*.*.entity"/> 	<!-- 如果多个，用“,”分隔 -->
+		
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
+<!-- 				<prop key="hibernate.dialect">com.wagon.common.dialect.SQLServer2012DialectExt</prop> -->
+<!-- 				<prop key="hibernate.dialect">com.wagon.common.dialect.Mysql5DialectExt</prop> -->
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">${spring.jpa.hibernate.auto}</prop>
+				<prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+				<!-- 解决javaee 和hibernate注解冲突问题 -->
+				<prop key="javax.persistence.validation.mode">none</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	
+	<!-- annotation事务管理--> 
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	<!-- annotation方式切面代理 -->
+	<aop:aspectj-autoproxy />
+
+</beans>
