@@ -31,3 +31,9 @@ server:
 hibernate:
   dialect: org.hibernate.dialect.MySQLInnoDBDialect
   format_sql: true
+wx:
+  miniapp:
+    configs:
+        - appid: wx17643dc63677c18a
+          secret: daa839f4b3cb45f0d71258038481a120
+          msgDataFormat: JSON
