@@ -1,5 +1,8 @@
 package com.cssiot.cssbase.modules.wechat.controller;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +15,11 @@ import com.cssiot.cssbase.modules.wechat.config.WxMaConfiguration;
 import com.cssiot.cssbase.modules.wechat.utils.JsonUtils;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.api.impl.WxMaMsgServiceImpl;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.binarywang.wx.miniapp.bean.WxMaPhoneNumberInfo;
+import cn.binarywang.wx.miniapp.bean.WxMaTemplateMessage;
+import cn.binarywang.wx.miniapp.bean.WxMaTemplateMessage.Data;
 import cn.binarywang.wx.miniapp.bean.WxMaUserInfo;
 import me.chanjar.weixin.common.error.WxErrorException;
 
@@ -80,7 +86,6 @@ public class WxMaUserController {
 
         // 解密用户信息
         WxMaUserInfo userInfo = wxService.getUserService().getUserInfo(sessionKey, encryptedData, iv);
-
         return JsonUtils.toJson(userInfo);
     }
 
@@ -108,4 +113,44 @@ public class WxMaUserController {
         return JsonUtils.toJson(phoneNoInfo);
     }
 
+    /**
+     * 测试发送模板消息
+     * 发送模板消息的情况：
+     * 		1、在小程序内使用了微信支付接口，此时formId可以取prepay_id
+	*  		2、在小程序里用户点击了表单，而且该表单的report-submit属性值为true时，formId取e.detail.formId
+     * @param appid	appId 必填
+     * @param openid 消息接受人 必填
+     * @param formId 表单id 必填
+     * @return
+     * @author 
+     * 		2018-09-23 Diego.zhou 新建
+     */
+    @GetMapping("/sendMsg")
+    public String sendMsg(@PathVariable String appid,String openid,String formId) {
+
+        final WxMaService wxService = WxMaConfiguration.getMaServices().get(appid);
+        if (wxService == null) {
+            throw new IllegalArgumentException(String.format("未找到对应appid=[%d]的配置，请核实！", appid));
+        }
+        // TEST 测试发送消息是否成功
+        try {
+        	WxMaTemplateMessage templateMessage = new WxMaTemplateMessage();
+        	templateMessage.setToUser(openid);//openId
+        	templateMessage.setTemplateId("CzSHg5ThZXpkgHda_8MB52-THUz0MmXAxhgFxZqtZBw");
+        	templateMessage.setFormId(formId);
+        	List dataList = Arrays.asList(
+        			new Data("keyword1","2018-09-23 21:00",""),
+        			new Data("keyword2","灌无忧",""),
+        			new Data("keyword3","微信",""),
+        			new Data("keyword4","100.00",""),
+        			new Data("keyword5","e232wa4fhrhfa3e","")
+        			);
+        	templateMessage.setData(dataList);
+        	WxMaMsgServiceImpl msgServiceImpl = new WxMaMsgServiceImpl(wxService);
+        	msgServiceImpl.sendTemplateMsg(templateMessage);
+        }catch(Exception e) {
+        	 this.logger.info("发送模板消息失败，{}",e);
+        }
+        return "发送消息";
+    }
 }
