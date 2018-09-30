@@ -25,6 +25,11 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * 启动类
+ * @author zdg
+ *
+ */
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan(basePackages={"com.cssiot.cssbase","com.cssiot.cssweb"})
