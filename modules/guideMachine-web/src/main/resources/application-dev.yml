@@ -37,3 +37,7 @@ wx:
         - appid: wx17643dc63677c18a
           secret: daa839f4b3cb45f0d71258038481a120
           msgDataFormat: JSON
+  pay:
+    appId: wx17643dc63677c18a
+    mchId: wx17643dc63677c18a
+    mchKey: wx17643dc63677c18a
