@@ -2,16 +2,16 @@ package com.cssiot.cssbase.modules.sys.dao.impl;
 
 import org.springframework.stereotype.Repository;
 
-import com.cssiot.cssbase.modules.sys.dao.UserDao;
-import com.cssiot.cssbase.modules.sys.entity.User;
+import com.cssiot.cssbase.modules.sys.dao.PermissionDao;
+import com.cssiot.cssbase.modules.sys.entity.Permission;
 import com.cssiot.cssutil.common.dao.impl.BaseDaoImpl;
 
 /**
- * 员工表daoImpl
+ * 权限表daoImpl
  * @author
  *	2018-10-07 athena 创建
  */
 @Repository
-public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao{
+public class PermissionDaoImpl extends BaseDaoImpl<Permission> implements PermissionDao{
 
 }

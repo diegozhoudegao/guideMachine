@@ -1,45 +1,42 @@
-package com.cssiot.cssbase.modules.sys.entity;
+package com.cssiot.cssbase.modules.sys.data;
 
-import javax.persistence.*;
-
-import com.cssiot.cssbase.modules.sys.data.UserModel;
-import com.cssiot.cssutil.common.entity.CommonFields;
+import com.cssiot.cssbase.modules.sys.entity.User;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
- * 员工表
+ * 登陆者信息
  * @author
- *	2018-10-05 athena 创建
+ *	2018-10-09 athena 创建
  */
-@Entity
 @Data
-@EqualsAndHashCode(callSuper=true)
-@Table(name = "t_sys_user")
-public class User extends CommonFields{
+public class LoginUserModel {
+	
+	@ApiModelProperty(value="员工id")
+	private String userId;
 	
 	@ApiModelProperty(value="姓名")
-	@Column(name="userName")
 	private String userName;
 	
 	@ApiModelProperty(value="账号")
-	@Column(name="loginName")
 	private String loginName;
 	
 	@ApiModelProperty(value="手机")
-	@Column(name="phone")
 	private String phone;
 
 	@ApiModelProperty(value="密码")
-	@Column(name="password")
 	private String password;
 	
-	public User(UserModel user) {
+	@ApiModelProperty(value="token")
+	private String token;
+
+	public LoginUserModel(User user) {
 		super();
+		this.userId = user.getId();
 		this.userName = user.getUserName();
 		this.loginName = user.getLoginName();
 		this.phone = user.getPhone();
 		this.password = user.getPassword();
 	}
+
 }

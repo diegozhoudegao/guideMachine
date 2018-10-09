@@ -1,13 +1,13 @@
 package com.cssiot.cssbase.modules.sys.dao;
 
-import com.cssiot.cssbase.modules.sys.entity.User;
+import com.cssiot.cssbase.modules.sys.entity.Permission;
 import com.cssiot.cssutil.common.dao.BaseDao;
 
 /**
- * 员工表dao
+ * 权限表dao
  * @author
  *	2018-10-07 athena 创建
  */
-public interface UserDao extends BaseDao<User>{
+public interface PermissionDao extends BaseDao<Permission>{
 
 }

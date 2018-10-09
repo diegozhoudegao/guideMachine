@@ -3,28 +3,28 @@ package com.cssiot.cssbase.modules.sys.service.impl;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.cssiot.cssbase.modules.sys.dao.UserDao;
-import com.cssiot.cssbase.modules.sys.entity.User;
-import com.cssiot.cssbase.modules.sys.service.UserService;
+import com.cssiot.cssbase.modules.sys.dao.CompanyDao;
+import com.cssiot.cssbase.modules.sys.entity.Company;
+import com.cssiot.cssbase.modules.sys.service.CompanyService;
 import com.cssiot.cssutil.common.dao.BaseDao;
 import com.cssiot.cssutil.common.service.impl.BaseServiceImpl;
 
 /**
- * 员工表ServiceImpl
+ * 公司表ServiceImpl
  * @author
  *	2018-10-07 athena 创建
  */
 @Service
 @Transactional
-public class UserServiceImpl extends BaseServiceImpl<User> implements UserService{
+public class CompanyServiceImpl extends BaseServiceImpl<Company> implements CompanyService{
 	
 	@Override
-	public BaseDao<User> getBaseDao() {
-		return userDao;
+	public BaseDao<Company> getBaseDao() {
+		return companyDao;
 	}
 	
 	@Autowired
-	private UserDao userDao;
+	private CompanyDao companyDao;
 	
 	
 }
