@@ -10,7 +10,7 @@ spring:
     hibernate:
       ddl-auto: none
   redis:
-    host: 10.10.58.250
+    host: 127.0.0.1
     port: 6379
   http:
     multipart:
