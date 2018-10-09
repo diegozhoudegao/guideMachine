@@ -37,7 +37,7 @@ public class UserTreeServiceImpl extends BaseServiceImpl<UserTree> implements Us
 	
 	/**
 	 * 获取用户对应树菜单接口
-	 * @param loginName 用户名
+	 * @param userId 用户名
 	 * @param token 安全令牌
 	 * @param clientType 客户端类型(android/ios/web等)
 	 * @return treeText 树结构
@@ -45,18 +45,18 @@ public class UserTreeServiceImpl extends BaseServiceImpl<UserTree> implements Us
 	 *	2018-10-09 athena 迁移
 	 */
 	@SuppressWarnings("all")
-	public Object getTreeText(String loginName,String token,String clientType){
+	public Object getTreeText(String userId,String token,String clientType){
 		Map map = new HashMap<>();
 		List treeList = new ArrayList<>();
-		String sqlTree = "from UserTree model where model.userId='"+loginName+"' and model.permission.name!='root' and (model.permission.schemeId='' or model.permission.schemeId is null or model.permission.schemeId='2' or model.permission.schemeId='1') and model.permission.state in('0','4','6','7') order by model.permission.number,model.permission.weight";
+		String sqlTree = "from UserTree model where model.userId='"+userId+"' and model.permission.name!='root' and (model.permission.schemeId='' or model.permission.schemeId is null or model.permission.schemeId='2' or model.permission.schemeId='1') and model.permission.state in('0','4','6','7') order by model.permission.number,model.permission.weight";
 		List<UserTree> userPermissions=new ArrayList<>();
 		try {
 			userPermissions = userTreeDao.findByHql(sqlTree);
 		} catch (Exception e) {
-			throw new ResultException(ResultEnum.DATA_ERROR,token,loginName,clientType);
+			throw new ResultException(ResultEnum.DATA_ERROR,token,userId,clientType);
 		}
 		if(ChkUtil.isEmptyAllObject(userPermissions)){
-			throw new ResultException(ResultEnum.USER_PERMERROR,token,loginName,clientType);
+			throw new ResultException(ResultEnum.USER_PERMERROR,token,userId,clientType);
 		}
 		for(int k=0;k<userPermissions.size();k++){
 			UserTree row = userPermissions.get(k);

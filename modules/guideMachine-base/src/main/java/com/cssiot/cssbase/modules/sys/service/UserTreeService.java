@@ -12,7 +12,7 @@ public interface UserTreeService extends BaseService<UserTree>{
 	
 	/**
 	 * 获取用户对应树菜单接口
-	 * @param loginName 用户名
+	 * @param userId 用户名
 	 * @param token 安全令牌
 	 * @param clientType 客户端类型(android/ios/web等)
 	 * @return treeText 树结构
@@ -20,5 +20,5 @@ public interface UserTreeService extends BaseService<UserTree>{
 	 *	2018-10-09 athena 迁移
 	 */
 	@SuppressWarnings("all")
-	public Object getTreeText(String loginName,String token,String clientType);
+	public Object getTreeText(String userId,String token,String clientType);
 }
