@@ -1,18 +1,25 @@
 package com.cssiot.cssbase.modules.wechat.controller;
 
 import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cssiot.cssbase.modules.sys.entity.Visitors;
+import com.cssiot.cssbase.modules.sys.service.VisitorsService;
 import com.cssiot.cssbase.modules.wechat.config.WxMaConfiguration;
 import com.cssiot.cssbase.modules.wechat.utils.JsonUtils;
+import com.cssiot.cssutil.common.enums.StateEnum;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.api.impl.WxMaMsgServiceImpl;
@@ -35,6 +42,9 @@ import me.chanjar.weixin.common.error.WxErrorException;
 public class WxMaUserController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    @Autowired
+    private VisitorsService visitorsService;
+    
    /**
     * 登陆接口,获取sessionKey和openid
     * @param appid	appId应与配置文件匹配
@@ -44,22 +54,33 @@ public class WxMaUserController {
     * 		2018-09-22 Diego.zhou 新建
     */
     @GetMapping("/login")
+    @SuppressWarnings("all")
     public String login(@PathVariable String appid, String code) {
         if (StringUtils.isBlank(code)) {
             return "empty jscode";
         }
-
         final WxMaService wxService = WxMaConfiguration.getMaServices().get(appid);
         if (wxService == null) {
             throw new IllegalArgumentException(String.format("未找到对应appid=[%d]的配置，请核实！", appid));
         }
-
         try {
             WxMaJscode2SessionResult session = wxService.getUserService().getSessionInfo(code);
             this.logger.info(session.getSessionKey());
             this.logger.info(session.getOpenid());
-            //TODO 可以增加自己的逻辑，关联业务相关数据
-            return JsonUtils.toJson(session);
+            //保存访客数据
+            Visitors visitor = new Visitors();
+            visitor.setOpenId(session.getOpenid());
+            visitor.setCreateTime(new Date());
+            visitor.setLastUpdateTime(new Date());
+            visitor.setStatus(StateEnum.NEWSTATE.getCode());
+            visitor.setVisitorsType("0");//	普通，TODO 后期改为枚举
+            visitor.setRegisterTime(new Date());
+            visitorsService.save(visitor);
+            Map map = new HashMap<>();
+            map.put("sessionKey",session.getSessionKey());
+            map.put("openid",session.getOpenid());
+            map.put("userId", visitor.getId());
+            return JsonUtils.toJson(map);
         } catch (WxErrorException e) {
             this.logger.error(e.getMessage(), e);
             return e.toString();
@@ -78,14 +99,20 @@ public class WxMaUserController {
         if (wxService == null) {
             throw new IllegalArgumentException(String.format("未找到对应appid=[%d]的配置，请核实！", appid));
         }
-
         // 用户信息校验
         if (!wxService.getUserService().checkUserInfo(sessionKey, rawData, signature)) {
             return "user check failed";
         }
-
         // 解密用户信息
         WxMaUserInfo userInfo = wxService.getUserService().getUserInfo(sessionKey, encryptedData, iv);
+        //通过openId获取该用户，更新该用户信息
+        Visitors visitor = visitorsService.getByHql("from Visitors where status='"+StateEnum.NEWSTATE.getCode()+"' and openId='"+userInfo.getOpenId()+"'");
+        if(null != visitor) {
+        	//更新用户信息,头像，昵称
+        	visitor.setWechatNo(userInfo.getNickName());
+        	visitor.setLastUpdateTime(new Date());
+        	visitorsService.save(visitor);
+        }
         return JsonUtils.toJson(userInfo);
     }
 
@@ -101,15 +128,21 @@ public class WxMaUserController {
         if (wxService == null) {
             throw new IllegalArgumentException(String.format("未找到对应appid=[%d]的配置，请核实！", appid));
         }
-
         // 用户信息校验
         if (!wxService.getUserService().checkUserInfo(sessionKey, rawData, signature)) {
             return "user check failed";
         }
-
         // 解密
+        WxMaUserInfo userInfo = wxService.getUserService().getUserInfo(sessionKey, encryptedData, iv);
         WxMaPhoneNumberInfo phoneNoInfo = wxService.getUserService().getPhoneNoInfo(sessionKey, encryptedData, iv);
-
+        //更新用户信息
+        Visitors visitor = visitorsService.getByHql("from Visitors where status='"+StateEnum.NEWSTATE.getCode()+"' and openId='"+userInfo.getOpenId()+"'");
+        if(null != visitor) {
+        	//更新用户信息
+        	visitor.setPhone(phoneNoInfo.getPhoneNumber());
+        	visitor.setLastUpdateTime(new Date());
+        	visitorsService.save(visitor);
+        }
         return JsonUtils.toJson(phoneNoInfo);
     }
 

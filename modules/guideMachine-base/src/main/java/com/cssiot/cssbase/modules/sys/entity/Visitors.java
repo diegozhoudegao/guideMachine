@@ -9,6 +9,7 @@ import com.cssiot.cssutil.common.entity.CommonFields;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * 游客表
@@ -17,6 +18,7 @@ import lombok.EqualsAndHashCode;
  */
 @Entity
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper=true)
 @Table(name = "t_sys_visitors")
 public class Visitors extends CommonFields{
