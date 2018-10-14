@@ -41,6 +41,7 @@ import com.github.binarywang.wxpay.bean.result.WxPayRefundQueryResult;
 import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
 import com.github.binarywang.wxpay.bean.result.WxPaySendRedpackResult;
 import com.github.binarywang.wxpay.bean.result.WxPayUnifiedOrderResult;
+import com.github.binarywang.wxpay.config.WxPayConfig;
 import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 import io.swagger.annotations.Api;
@@ -63,6 +64,14 @@ public class WxPayController {
     this.wxService = wxService;
   }
 
+  @ApiOperation(value = "统一下单，并组装所需支付参数")
+  @PostMapping("/doCreateOrder")
+  public <T> T doCreateOrder(@RequestBody WxPayUnifiedOrderRequest request) throws WxPayException {
+	  //获取config,并替换其中的商户信息
+	  WxPayConfig config = this.wxService.getConfig();
+	  config.setMchId("aa");
+	  return this.wxService.createOrder(request);
+  }
   /**
    * <pre>
    * 查询订单(详见https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_2)

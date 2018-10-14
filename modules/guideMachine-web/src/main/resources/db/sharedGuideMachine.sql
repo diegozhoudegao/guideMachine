@@ -197,6 +197,8 @@ CREATE TABLE `t_sys_visitors` (
   `vipRemark` varchar(64) DEFAULT NULL COMMENT 'VIP说明',
   `accountAmount` int(11) DEFAULT NULL COMMENT '账户',
   `openId` varchar(64) DEFAULT NULL COMMENT '小程序标识',
+  `sessionKey` varchar(64) DEFAULT NULL COMMENT '用户小程序sessionKey',
+  `sKey` varchar(64) DEFAULT NULL COMMENT '用户小程序自定义登录态',
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',

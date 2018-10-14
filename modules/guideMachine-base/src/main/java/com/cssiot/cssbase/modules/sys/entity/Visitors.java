@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
  * 游客表
  * @author
  *	2018-10-05 athena 创建
+ *	2018-10-14 Diego.zhou 增加小程序专用的sessionKey和sKey字段
  */
 @Entity
 @Data
@@ -115,9 +116,17 @@ public class Visitors extends CommonFields{
 	@Column(name="accountAmount")
 	private Integer accountAmount;
 	
-	@ApiModelProperty(value="小程序标识")
+	@ApiModelProperty(value="用户小程序用户对应openId")
 	@Column(name="openId")
 	private String openId;
+	
+	@ApiModelProperty(value="用户小程序自定义登录态")
+	@Column(name="sKey")
+	private String sKey;
+	
+	@ApiModelProperty(value="用户小程序sessionKey")
+	@Column(name="sessionKey")
+	private String sessionKey;
 	
 	public Visitors(VisitorsModel visitors,String userId) {
 		super();
