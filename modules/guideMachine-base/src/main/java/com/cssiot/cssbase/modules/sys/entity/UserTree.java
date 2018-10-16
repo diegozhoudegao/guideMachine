@@ -14,6 +14,7 @@ import lombok.Data;
 @Table(name = "v_sys_userTree")
 public class UserTree {
 
+	@Id
 	@ApiModelProperty(value="员工树id")
 	@Column(name="id")
 	private String id;

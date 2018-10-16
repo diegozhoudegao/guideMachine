@@ -27,6 +27,7 @@ import com.github.binarywang.wxpay.exception.WxPayException;
 import com.github.binarywang.wxpay.service.WxPayService;
 
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 微信支付
@@ -36,6 +37,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @Service
 @Transactional
+@Slf4j
 public class WxPayResultServiceImpl implements WxPayResultService {
 	
 	private WxPayService wxService;
