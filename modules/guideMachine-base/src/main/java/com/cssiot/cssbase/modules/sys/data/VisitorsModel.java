@@ -16,7 +16,7 @@ public class VisitorsModel {
 	@ApiModelProperty(value="游客id")
 	private String visitorsId;
 	
-	@ApiModelProperty(value="游客等级(普通、VIP)")
+	@ApiModelProperty(value="游客等级(0普通、1VIP)")
 	private String visitorsType;
 	
 	@ApiModelProperty(value="注册日期")
@@ -67,7 +67,7 @@ public class VisitorsModel {
 	@ApiModelProperty(value="租借次数")
 	private Integer rentNumber;
 	
-	@ApiModelProperty(value="是否黑名单(是、否)")
+	@ApiModelProperty(value="是否黑名单(0是、1否)")
 	private String isBlacklist;
 	
 	@ApiModelProperty(value="最近租借日期")
@@ -76,7 +76,7 @@ public class VisitorsModel {
 	@ApiModelProperty(value="导游机编号")
 	private String guideMachineNo;
 	
-	@ApiModelProperty(value="归还状态(未归还、已归还)")
+	@ApiModelProperty(value="归还状态(0未归还、1已归还)")
 	private String returnStatus;
 	
 	@ApiModelProperty(value="VIP说明")

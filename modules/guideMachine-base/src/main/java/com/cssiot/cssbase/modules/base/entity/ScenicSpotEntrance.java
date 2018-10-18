@@ -38,7 +38,7 @@ public class ScenicSpotEntrance extends CommonFields{
 	@Column(name="dimension")
 	private String dimension;
 	
-	@ApiModelProperty(value="类型(出口、入口)")
+	@ApiModelProperty(value="类型(0出口、1入口)")
 	@Column(name="entranceType")
 	private String entranceType;
 

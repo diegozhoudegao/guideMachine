@@ -29,7 +29,7 @@ public class RentOrder extends CommonFields{
 	@Column(name="guideMachineNo")
 	private String guideMachineNo;
 	
-	@ApiModelProperty(value="租借方式(小程序、身份证)")
+	@ApiModelProperty(value="租借方式(0小程序、1身份证)")
 	@Column(name="rentType")
 	private String rentType;
 	
@@ -57,15 +57,15 @@ public class RentOrder extends CommonFields{
 	@Column(name="depositAmount")
 	private Integer depositAmount;
 	
-	@ApiModelProperty(value="归还状态(未归还、已归还)")
+	@ApiModelProperty(value="归还状态(0未归还、1已归还)")
 	@Column(name="returnStatus")
 	private String returnStatus;
 	
-	@ApiModelProperty(value="押金退还状态(未退还、已退还)")
+	@ApiModelProperty(value="押金退还状态(0未退还、1已退还)")
 	@Column(name="refundDepositStatus")
 	private String refundDepositStatus;
 	
-	@ApiModelProperty(value="租金退还状态(未退还、已退还)")
+	@ApiModelProperty(value="租金退还状态(0未退还、1已退还)")
 	@Column(name="refundRentStatus")
 	private String refundRentStatus;
 	
@@ -77,9 +77,17 @@ public class RentOrder extends CommonFields{
 	@Column(name="refundDepositRemark")
 	private String refundDepositRemark;
 	
-	@ApiModelProperty(value="订单支付状态(未支付、已支付)")
+	@ApiModelProperty(value="订单支付状态(0未支付、1已支付)")
 	@Column(name="orderPayStatus")
 	private String orderPayStatus;
+	
+	@ApiModelProperty(value="租借人员")
+	@Column(name="rentUser")
+	private String rentUser;
+	
+	@ApiModelProperty(value="交易编号")
+	@Column(name="transactionNo")
+	private String transactionNo;
 	
 	public RentOrder(RentOrderModel rentOrder) {
 		super();
@@ -98,6 +106,8 @@ public class RentOrder extends CommonFields{
 		this.refundRentRemark = rentOrder.getRefundRentRemark();
 		this.refundDepositRemark = rentOrder.getRefundDepositRemark();
 		this.orderPayStatus = rentOrder.getOrderPayStatus();
+		this.rentUser=rentOrder.getRentUser();
+		this.transactionNo=rentOrder.getTransactionNo();
 	}
 	
 }

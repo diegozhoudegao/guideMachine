@@ -32,7 +32,7 @@ public class CabinetModel {
 	@ApiModelProperty(value="安装日期")
 	private Date installTime;
 	
-	@ApiModelProperty(value="机柜状态(正常、异常)")
+	@ApiModelProperty(value="机柜状态(0正常、1异常)")
 	private String cabinetStatus;
 	
 	@ApiModelProperty(value="仓道数")

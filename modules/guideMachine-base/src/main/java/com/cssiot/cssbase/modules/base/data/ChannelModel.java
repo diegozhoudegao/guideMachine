@@ -18,13 +18,13 @@ public class ChannelModel {
 	@ApiModelProperty(value="机柜id")
 	private String cabinetId;
 	
-	@ApiModelProperty(value="仓道状态(正常、异常)")
+	@ApiModelProperty(value="仓道状态(0正常、1异常)")
 	private String channelStatus;
 	
 	@ApiModelProperty(value="仓道在机柜位置")
 	private String position;
 	
-	@ApiModelProperty(value="导游机在仓状态(在仓则显示导游机编号、空仓)")
+	@ApiModelProperty(value="导游机在仓状态(在仓则显示导游机编号、2空仓)")
 	private String guideMachineStatus;
 
 	public ChannelModel(Channel channel) {

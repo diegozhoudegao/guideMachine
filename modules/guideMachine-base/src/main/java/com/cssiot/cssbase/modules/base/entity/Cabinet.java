@@ -44,7 +44,7 @@ public class Cabinet extends CommonFields{
 	@Column(name="installTime")
 	private Date installTime;
 	
-	@ApiModelProperty(value="机柜状态(正常、异常)")
+	@ApiModelProperty(value="机柜状态(0正常、1异常)")
 	@Column(name="cabinetStatus")
 	private String cabinetStatus;
 	

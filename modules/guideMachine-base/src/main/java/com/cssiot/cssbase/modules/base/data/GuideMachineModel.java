@@ -34,19 +34,19 @@ public class GuideMachineModel {
 	@ApiModelProperty(value="安装日期")
 	private Date installTime;
 	
-	@ApiModelProperty(value="温度状态(正常、异常)")
+	@ApiModelProperty(value="温度状态(正常数值、-1异常)")
 	private String temperatureStatus;
 	
-	@ApiModelProperty(value="电量状态(正常数值、异常)")
+	@ApiModelProperty(value="电量状态(正常数值、-1异常)")
 	private String electricityStatus;
 	
-	@ApiModelProperty(value="设备状态(正常、损坏、异常、丢失)")
+	@ApiModelProperty(value="设备状态(0正常、2损坏、1异常、3丢失)")
 	private String machineStatus;
 	
-	@ApiModelProperty(value="租用状态(可租、不可租、已租)")
+	@ApiModelProperty(value="租用状态(0可租、2不可租、1已租)")
 	private String rentStatus;
 	
-	@ApiModelProperty(value="位置状态(正常、异常、空)")
+	@ApiModelProperty(value="位置状态(0正常、1异常、2空)")
 	private String positionStatus;
 
 	public GuideMachineModel(GuideMachine guideMachine) {

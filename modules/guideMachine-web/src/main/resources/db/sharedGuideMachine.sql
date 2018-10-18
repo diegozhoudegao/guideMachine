@@ -17,7 +17,7 @@ CREATE TABLE `t_base_cabinet` (
   `dimension` varchar(64) DEFAULT NULL COMMENT '维度',
   `scenicSpotId` varchar(64) DEFAULT NULL COMMENT '景点id',
   `installTime` datetime DEFAULT NULL COMMENT '安装日期',
-  `cabinetStatus` varchar(64) DEFAULT NULL COMMENT '机柜状态(正常、异常)',
+  `cabinetStatus` varchar(64) DEFAULT NULL COMMENT '机柜状态(0正常、1异常)',
   `channelNumber` int(11) DEFAULT NULL  COMMENT '仓道数',
   `softVersion` varchar(64) DEFAULT NULL COMMENT 'APK版本',
   `hardwareVersion` varchar(64) DEFAULT NULL COMMENT '硬件版本',
@@ -25,7 +25,7 @@ CREATE TABLE `t_base_cabinet` (
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
-  `status` varchar(64) DEFAULT '1' COMMENT '状态(1正常、0废弃)',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='机柜表';
 
@@ -40,14 +40,14 @@ DROP TABLE IF EXISTS `t_base_channel`;
 CREATE TABLE `t_base_channel` (
   `id` varchar(64) NOT NULL COMMENT '仓道id',
   `cabinetId` varchar(64) DEFAULT NULL COMMENT '机柜id',
-  `channelStatus` varchar(64) DEFAULT NULL COMMENT '仓道状态(正常、异常)',
+  `channelStatus` varchar(64) DEFAULT NULL COMMENT '仓道状态(0正常、1异常)',
   `position` varchar(64) DEFAULT NULL COMMENT '仓道在机柜位置',
-  `guideMachineStatus` varchar(64) DEFAULT NULL COMMENT '导游机在仓状态(在仓则显示导游机编号、空仓)',
+  `guideMachineStatus` varchar(64) DEFAULT NULL COMMENT '导游机在仓状态(在仓则显示导游机编号、2空仓)',
   `createUser` varchar(64) DEFAULT NULL COMMENT '创建人',
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
-  `status` varchar(64) DEFAULT '1' COMMENT '状态(1正常、0废弃)',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='仓道表';
 
@@ -67,16 +67,16 @@ CREATE TABLE `t_base_guideMachine` (
   `guideMachineNo` varchar(64) DEFAULT NULL COMMENT '导游机编号',
   `guideMachineType` varchar(64) DEFAULT NULL COMMENT '机型',
   `installTime` datetime DEFAULT NULL COMMENT '安装日期',
-  `temperatureStatus` varchar(64) DEFAULT NULL COMMENT '温度状态(正常、异常)',
-  `electricityStatus` varchar(64) DEFAULT NULL COMMENT '电量状态(正常数值、异常)',
-  `machineStatus` varchar(64) DEFAULT NULL COMMENT '设备状态(正常、损坏、异常、丢失)',
-  `rentStatus` varchar(64) DEFAULT NULL COMMENT '租用状态(可租、不可租、已租)',
-  `positionStatus` varchar(64) DEFAULT NULL COMMENT '位置状态(正常、异常、空)',
+  `temperatureStatus` varchar(64) DEFAULT NULL COMMENT '温度状态(正常数值、-1异常)',
+  `electricityStatus` varchar(64) DEFAULT NULL COMMENT '电量状态(正常数值、-1异常)',
+  `machineStatus` varchar(64) DEFAULT NULL COMMENT '设备状态(0正常、2损坏、1异常、3丢失)',
+  `rentStatus` varchar(64) DEFAULT NULL COMMENT '租用状态(0可租、2不可租、1已租)',
+  `positionStatus` varchar(64) DEFAULT NULL COMMENT '位置状态(0正常、1异常、2空)',
   `createUser` varchar(64) DEFAULT NULL COMMENT '创建人',
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
-  `status` varchar(64) DEFAULT '1' COMMENT '状态(1正常、0废弃)',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='导游机表';
 
@@ -104,7 +104,7 @@ CREATE TABLE `t_base_scenicSpot` (
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
-  `status` varchar(64) DEFAULT '1' COMMENT '状态(1正常、0废弃)',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='景点主表';
 
@@ -119,7 +119,7 @@ DROP TABLE IF EXISTS `t_base_scenicSpotEntrance`;
 CREATE TABLE `t_base_scenicSpotEntrance` (
   `id` varchar(64) NOT NULL COMMENT '景点出入口id',
   `scenicSpotId` varchar(64) NOT NULL COMMENT '景点id',
-  `entranceType` varchar(64) DEFAULT NULL COMMENT '类型(出口、入口)',
+  `entranceType` varchar(64) DEFAULT NULL COMMENT '类型(0出口、1入口)',
   `address` varchar(64) DEFAULT NULL COMMENT '地址',
   `longitude` varchar(64) DEFAULT NULL COMMENT '经度',
   `dimension` varchar(64) DEFAULT NULL COMMENT '维度',
@@ -127,7 +127,7 @@ CREATE TABLE `t_base_scenicSpotEntrance` (
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
-  `status` varchar(64) DEFAULT '1' COMMENT '状态(1正常、0废弃)',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='景点出入口表';
 
@@ -143,19 +143,21 @@ CREATE TABLE `t_biz_rentOrder` (
   `id` varchar(64) NOT NULL COMMENT '租借订单id',
   `orderNo` varchar(64) DEFAULT NULL COMMENT '订单编号',
   `guideMachineNo` varchar(64) DEFAULT NULL COMMENT '导游机编号',
-  `rentType` varchar(64) DEFAULT NULL COMMENT '租借方式(小程序、身份证)',
+  `rentType` varchar(64) DEFAULT NULL COMMENT '租借方式(0小程序、1身份证)',
   `phone` varchar(64) DEFAULT NULL COMMENT '手机',
   `identityCard` varchar(64) DEFAULT NULL COMMENT '身份证',
   `rentAmount` int(11) DEFAULT NULL COMMENT '租金',
   `depositAmount` int(11) DEFAULT NULL COMMENT '押金',
   `rentTime` datetime DEFAULT NULL COMMENT '租借时间',
   `returnTime` datetime DEFAULT NULL COMMENT '归还时间',
-  `returnStatus` varchar(64) DEFAULT NULL COMMENT '归还状态(未归还、已归还)',
-  `refundDepositStatus` varchar(64) DEFAULT NULL COMMENT '押金退还状态(未退还、已退还)',
-  `refundRentStatus` varchar(64) DEFAULT NULL COMMENT '租金退还状态(未退还、已退还)',
+  `returnStatus` varchar(64) DEFAULT NULL COMMENT '归还状态(0未归还、1已归还)',
+  `refundDepositStatus` varchar(64) DEFAULT NULL COMMENT '押金退还状态(0未退还、1已退还)',
+  `refundRentStatus` varchar(64) DEFAULT NULL COMMENT '租金退还状态(0未退还、1已退还)',
   `refundRentRemark` varchar(64) DEFAULT NULL COMMENT '已退租金备注',
   `refundDepositRemark` varchar(64) DEFAULT NULL COMMENT '已退押金备注',
-  `orderPayStatus` varchar(64) DEFAULT NULL COMMENT '订单支付状态(未支付、已支付)',
+  `orderPayStatus` varchar(64) DEFAULT NULL COMMENT '订单支付状态(0未支付、1已支付)',
+  `rentUser` varchar(64) DEFAULT NULL COMMENT '租借人员',
+  `transactionNo` varchar(64) DEFAULT NULL COMMENT '交易编号',
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
@@ -173,7 +175,7 @@ CREATE TABLE `t_biz_rentOrder` (
 DROP TABLE IF EXISTS `t_sys_visitors`;
 CREATE TABLE `t_sys_visitors` (
   `id` varchar(64) NOT NULL COMMENT '游客id',
-  `visitorsType` varchar(64) DEFAULT NULL COMMENT '游客等级(普通、VIP)',
+  `visitorsType` varchar(64) DEFAULT NULL COMMENT '游客等级(0普通、1VIP)',
   `registerTime` datetime DEFAULT NULL COMMENT '注册日期',
   `province` varchar(64) DEFAULT NULL COMMENT '注册省份',
   `city` varchar(64) DEFAULT NULL COMMENT '注册城市',
@@ -190,10 +192,10 @@ CREATE TABLE `t_sys_visitors` (
   `birthDate` varchar(64) DEFAULT NULL COMMENT '出生年月',
   `homeAddress` varchar(64) DEFAULT NULL COMMENT '家庭地址',
   `rentNumber` int(11) DEFAULT NULL COMMENT '租借次数',
-  `isBlacklist` varchar(64) DEFAULT NULL COMMENT '是否黑名单(是、否)',
+  `isBlacklist` varchar(64) DEFAULT NULL COMMENT '是否黑名单(0是、1否)',
   `lastRentTime` datetime DEFAULT NULL COMMENT '最近租借日期',
   `guideMachineNo` varchar(64) DEFAULT NULL COMMENT '导游机编号',
-  `returnStatus` varchar(64) DEFAULT NULL COMMENT '归还状态(未归还、已归还)',
+  `returnStatus` varchar(64) DEFAULT NULL COMMENT '归还状态(0未归还、1已归还)',
   `vipRemark` varchar(64) DEFAULT NULL COMMENT 'VIP说明',
   `accountAmount` int(11) DEFAULT NULL COMMENT '账户',
   `openId` varchar(64) DEFAULT NULL COMMENT '小程序标识',
@@ -202,7 +204,7 @@ CREATE TABLE `t_sys_visitors` (
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
-  `status` varchar(64) DEFAULT '1' COMMENT '状态(1正常、0废弃)',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='游客表';
 
@@ -218,12 +220,13 @@ CREATE TABLE `t_sys_transactionDetail` (
   `id` varchar(64) NOT NULL COMMENT '交易明细id',
   `visitorsId` varchar(64) DEFAULT NULL COMMENT '游客id',
   `transactioAmount` int(11) DEFAULT NULL COMMENT '交易金额',
-  `transactioType` varchar(64) DEFAULT NULL COMMENT '交易类型(充值、提现、退款)',
-  `transactioMode` varchar(64) DEFAULT NULL COMMENT '方式(微信、支付宝)',
+  `transactioType` varchar(64) DEFAULT NULL COMMENT '交易类型(0充值、1提现、2退款)',
+  `transactioMode` varchar(64) DEFAULT NULL COMMENT '方式(0微信、1支付宝、2现金)',
+  `transactionNo` varchar(64) DEFAULT NULL COMMENT '交易编号',
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
-  `status` varchar(64) DEFAULT '1' COMMENT '状态(1正常、0废弃)',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='交易明细表';
 
@@ -254,7 +257,7 @@ CREATE TABLE `t_sys_rentHistory` (
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
-  `status` varchar(64) DEFAULT '1' COMMENT '状态(1正常、0废弃)',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='租借历史表';
 
@@ -297,7 +300,7 @@ CREATE TABLE `t_sys_userCityManage` (
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
-  `status` varchar(64) DEFAULT '1' COMMENT '状态(1正常、0废弃)',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='员工管理城市表';
 
@@ -316,7 +319,7 @@ CREATE TABLE `t_sys_userRole` (
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
-  `status` varchar(64) DEFAULT '1' COMMENT '状态(1正常、0废弃)',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='员工角色表';
 
@@ -334,7 +337,7 @@ CREATE TABLE `t_sys_role` (
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
-  `status` varchar(64) DEFAULT '1' COMMENT '状态(1正常、0废弃)',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色表';
 
@@ -360,7 +363,7 @@ CREATE TABLE `t_sys_permission` (
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
-  `status` varchar(64) DEFAULT '1' COMMENT '状态(1正常、0废弃)',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限表';
 
@@ -379,7 +382,7 @@ CREATE TABLE `t_sys_rolePermission` (
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
-  `status` varchar(64) DEFAULT '1' COMMENT '状态(1正常、0废弃)',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色权限表';
 
@@ -406,7 +409,7 @@ CREATE TABLE `t_sys_company` (
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
-  `status` varchar(64) DEFAULT '1' COMMENT '状态(1正常、0废弃)',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='公司表';
 

@@ -40,7 +40,7 @@ public class CommonFields {
 	@Column(name="lastUpdateTime")
 	private Date lastUpdateTime;
 	
-	//状态
+	//其他状态(0正常、1废弃)---订单状态(0锁定、1租借中、2完成、3失败)--员工状态(0暂存、1离职、2在职)
 	@Column(name="status")
 	private String status;
 }

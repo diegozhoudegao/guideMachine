@@ -24,7 +24,7 @@ public class Channel extends CommonFields{
 	@Column(name="cabinetId")
 	private String cabinetId;
 	
-	@ApiModelProperty(value="仓道状态(正常、异常)")
+	@ApiModelProperty(value="仓道状态(0正常、1异常)")
 	@Column(name="channelStatus")
 	private String channelStatus;
 	
@@ -32,7 +32,7 @@ public class Channel extends CommonFields{
 	@Column(name="position")
 	private String position;
 	
-	@ApiModelProperty(value="导游机在仓状态(在仓则显示导游机编号、空仓)")
+	@ApiModelProperty(value="导游机在仓状态(在仓则显示导游机编号、2空仓)")
 	@Column(name="guideMachineStatus")
 	private String guideMachineStatus;
 

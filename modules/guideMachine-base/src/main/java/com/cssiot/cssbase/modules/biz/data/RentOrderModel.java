@@ -22,7 +22,7 @@ public class RentOrderModel {
 	@ApiModelProperty(value="导游机编号")
 	private String guideMachineNo;
 	
-	@ApiModelProperty(value="租借方式(小程序、身份证)")
+	@ApiModelProperty(value="租借方式(0小程序、1身份证)")
 	private String rentType;
 	
 	@ApiModelProperty(value="手机")
@@ -43,13 +43,13 @@ public class RentOrderModel {
 	@ApiModelProperty(value="押金")
 	private Integer depositAmount;
 	
-	@ApiModelProperty(value="归还状态(未归还、已归还)")
+	@ApiModelProperty(value="归还状态(0未归还、1已归还)")
 	private String returnStatus;
 	
-	@ApiModelProperty(value="押金退还状态(未退还、已退还)")
+	@ApiModelProperty(value="押金退还状态(0未退还、1已退还)")
 	private String refundDepositStatus;
 	
-	@ApiModelProperty(value="租金退还状态(未退还、已退还)")
+	@ApiModelProperty(value="租金退还状态(0未退还、1已退还)")
 	private String refundRentStatus;
 	
 	@ApiModelProperty(value="已退租金备注")
@@ -58,8 +58,14 @@ public class RentOrderModel {
 	@ApiModelProperty(value="已退押金备注")
 	private String refundDepositRemark;
 	
-	@ApiModelProperty(value="订单支付状态(未支付、已支付)")
+	@ApiModelProperty(value="订单支付状态(0未支付、1已支付)")
 	private String orderPayStatus;
+	
+	@ApiModelProperty(value="租借人员")
+	private String rentUser;
+	
+	@ApiModelProperty(value="交易编号")
+	private String transactionNo;
 
 	public RentOrderModel(RentOrder rentOrder) {
 		super();
@@ -79,6 +85,8 @@ public class RentOrderModel {
 		this.refundRentRemark = rentOrder.getRefundRentRemark();
 		this.refundDepositRemark = rentOrder.getRefundDepositRemark();
 		this.orderPayStatus = rentOrder.getOrderPayStatus();
+		this.rentUser=rentOrder.getRentUser();
+		this.transactionNo=rentOrder.getTransactionNo();
 	}
 	
 }

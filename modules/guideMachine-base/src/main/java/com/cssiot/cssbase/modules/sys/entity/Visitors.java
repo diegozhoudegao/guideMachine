@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "t_sys_visitors")
 public class Visitors extends CommonFields{
 
-	@ApiModelProperty(value="游客等级(普通、VIP)")
+	@ApiModelProperty(value="游客等级(0普通、1VIP)")
 	@Column(name="visitorsType")
 	private String visitorsType;
 	
@@ -92,7 +92,7 @@ public class Visitors extends CommonFields{
 	@Column(name="rentNumber")
 	private Integer rentNumber;
 	
-	@ApiModelProperty(value="是否黑名单(是、否)")
+	@ApiModelProperty(value="是否黑名单(0是、1否)")
 	@Column(name="isBlacklist")
 	private String isBlacklist;
 	
@@ -104,7 +104,7 @@ public class Visitors extends CommonFields{
 	@Column(name="guideMachineNo")
 	private String guideMachineNo;
 	
-	@ApiModelProperty(value="归还状态(未归还、已归还)")
+	@ApiModelProperty(value="归还状态(0未归还、1已归还)")
 	@Column(name="returnStatus")
 	private String returnStatus;
 	

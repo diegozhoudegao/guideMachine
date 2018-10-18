@@ -28,13 +28,17 @@ public class TransactionDetail extends CommonFields{
 	@Column(name="transactioAmount")
 	private Integer transactioAmount;
 	
-	@ApiModelProperty(value="交易类型(充值、提现、退款)")
+	@ApiModelProperty(value="交易类型(0充值、1提现、2退款)")
 	@Column(name="transactioType")
 	private String transactioType;
 
-	@ApiModelProperty(value="方式(微信、支付宝)")
+	@ApiModelProperty(value="方式(0微信、1支付宝、2现金)")
 	@Column(name="transactioMode")
 	private String transactioMode;
+	
+	@ApiModelProperty(value="交易编号")
+	@Column(name="transactionNo")
+	private String transactionNo;
 	
 	public TransactionDetail(TransactionDetailModel transactionDetail) {
 		super();
@@ -42,5 +46,6 @@ public class TransactionDetail extends CommonFields{
 		this.transactioAmount = transactionDetail.getTransactioAmount();
 		this.transactioType = transactionDetail.getTransactioType();
 		this.transactioMode = transactionDetail.getTransactioMode();
+		this.transactionNo=transactionDetail.getTransactionNo();
 	}
 }
