@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
  * 员工表
  * @author
  *	2018-10-05 athena 创建
+ *	2018-10-19 athena 增加员工微信对应openId
  */
 @Entity
 @Data
@@ -34,6 +35,10 @@ public class User extends CommonFields{
 	@ApiModelProperty(value="密码")
 	@Column(name="password")
 	private String password;
+	
+	@ApiModelProperty(value="员工微信对应openId")
+	@Column(name="openId")
+	private String openId;
 	
 	public User(UserModel user) {
 		super();

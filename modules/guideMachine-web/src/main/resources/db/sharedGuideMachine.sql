@@ -275,6 +275,7 @@ CREATE TABLE `t_sys_user` (
   `loginName` varchar(64) DEFAULT NULL COMMENT '账号',
   `phone` varchar(64) DEFAULT NULL COMMENT '手机',
   `password` varchar(64) DEFAULT NULL COMMENT '密码',
+  `openId` varchar(64) DEFAULT NULL COMMENT '员工微信对应openId',
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
   `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
   `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
@@ -369,6 +370,48 @@ CREATE TABLE `t_sys_permission` (
 
 -- ----------------------------
 -- Records of t_sys_permission
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `t_sys_permissionDivide`
+-- ----------------------------
+DROP TABLE IF EXISTS `t_sys_permissionDivide`;
+CREATE TABLE `t_sys_permissionDivide` (
+  `id` varchar(64) NOT NULL COMMENT '权限操作id',
+  `name` varchar(64) DEFAULT NULL COMMENT '标签',
+  `keyName` varchar(64) DEFAULT NULL COMMENT '键值',
+  `module` varchar(64) DEFAULT NULL COMMENT '所属模块',
+  `content` varchar(64) DEFAULT NULL COMMENT '模块内容',
+  `weight` int(11) DEFAULT NULL COMMENT '权重',
+  `createTime` datetime DEFAULT NULL COMMENT '创建时间',
+  `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
+  `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='权限操作表';
+
+-- ----------------------------
+-- Records of t_sys_permissionDivide
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `t_sys_rolePermissionDivide`
+-- ----------------------------
+DROP TABLE IF EXISTS `t_sys_rolePermissionDivide`;
+CREATE TABLE `t_sys_rolePermissionDivide` (
+  `id` varchar(64) NOT NULL COMMENT '角色权限操作id',
+  `rolePermissionId` varchar(64) DEFAULT NULL COMMENT '角色权限Id',
+  `keyNameId` varchar(64) DEFAULT NULL COMMENT '键值Id(dataDictionary数据字典的ID)',
+  `name` varchar(64) DEFAULT NULL COMMENT '标签',
+  `createTime` datetime DEFAULT NULL COMMENT '创建时间',
+  `lastUpdateUser` varchar(64) DEFAULT NULL COMMENT '最后修改人',
+  `lastUpdateTime` datetime DEFAULT NULL COMMENT '最后更新时间',
+  `status` varchar(64) DEFAULT '1' COMMENT '状态(0正常、1废弃)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='角色权限操作表';
+
+-- ----------------------------
+-- Records of t_sys_rolePermissionDivide
 -- ----------------------------
 
 -- ----------------------------
@@ -555,3 +598,36 @@ SELECT
 	d.permissionId,
 	d.flag
 FROM v_sys_userTree_two d;
+
+-- ----------------------------
+-- View structure for `v_sys_userPermissionDivide`
+-- ----------------------------
+DROP VIEW IF EXISTS `v_sys_userPermissionDivide`;
+CREATE VIEW `v_sys_userPermissionDivide` AS 
+SELECT
+	-- 用户权限操作控制
+	ur.userId || ur.roleId AS id,
+	ur.userId,
+	ur.roleId,
+	rp.permissionId,
+	pm.content,
+	rm.keyNameId,
+	dc.keyName,
+	dc.name,
+	dc.weight
+FROM
+	t_sys_userRole ur,
+	t_sys_rolePermission rp,
+	t_sys_rolePermissionDivide rm,
+	t_sys_permission pm,
+	t_sys_permissionDivide dc
+WHERE
+	rp.id = rm.rolePermissionId
+AND ur.roleId = rp.roleId
+AND rp.permissionId = pm.Id
+AND rm.keyNameId = dc.Id
+AND ur.status = '0'
+AND rp.status = '0'
+AND rm.status = '0'
+AND pm.status <> '1'
+AND dc.status = '0';
