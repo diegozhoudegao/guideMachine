@@ -147,6 +147,7 @@ public class QuartzConfiguration {
         factoryBean.setJobClass(EveryDayJob.class);
         factoryBean.setGroup("group1");
         factoryBean.setName("job1");
+        factoryBean.setDurability(true);
         return factoryBean;
     }
     

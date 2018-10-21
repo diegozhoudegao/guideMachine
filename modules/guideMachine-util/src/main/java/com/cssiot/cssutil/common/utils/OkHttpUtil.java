@@ -1,12 +1,17 @@
 package com.cssiot.cssutil.common.utils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Method;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
@@ -15,7 +20,6 @@ import com.cssiot.cssutil.common.exception.ResultException;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.FormBody;
 import okhttp3.Interceptor;
-import okhttp3.Interceptor.Chain;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -477,4 +481,5 @@ public class OkHttpUtil{
 	       return responseBody;
 	  	
 	  }
+   
 }

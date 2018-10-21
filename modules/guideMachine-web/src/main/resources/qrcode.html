@@ -1,0 +1,87 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>用户微信绑定</title>
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+ 
+<body>
+
+
+服务器主动推送消息：<br/>
+<div id="message">
+</div>
+
+<input type="button" id="send" value="点击请求获取二维码"/>
+<img src="" id="imageId" height="100%" style="float: right">
+</body>
+<script type="text/javascript">
+
+$(function(){
+	var websocket = null;
+ 
+    //判断当前浏览器是否支持WebSocket
+    if('WebSocket' in window){
+        websocket = new WebSocket("ws://192.168.1.5:8086/websocket/aaaabbbbbccc");
+    }
+    else{
+        alert('Not support websocket')
+    }
+ 
+    //连接发生错误的回调方法
+    websocket.onerror = function(){
+        setMessageInnerHTML("error");
+    };
+ 
+    //连接成功建立的回调方法
+    websocket.onopen = function(event){
+        setMessageInnerHTML("成功建立连接");
+    }
+ 
+    //接收到消息的回调方法
+    websocket.onmessage = function(event){
+        setMessageInnerHTML(event.data);
+    }
+ 
+    //连接关闭的回调方法
+    websocket.onclose = function(){
+        setMessageInnerHTML("close");
+    }
+ 
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function(){
+        websocket.close();
+    }
+ 
+    //将消息显示在网页上
+    function setMessageInnerHTML(innerHTML){
+        document.getElementById('message').innerHTML += innerHTML + '<br/>';
+		alert(innerHTML);
+    }
+ 
+    //关闭连接
+    function closeWebSocket(){
+        websocket.close();
+    }
+ 
+    //发送消息
+    function send(){
+        var message = document.getElementById('text').value;
+        websocket.send(message);
+    }
+    $('#send').click(function(){
+         $.ajax({
+             type: "GET",
+             url: "http://diego.s1.natapp.cc/wxHandler/doGetQrCode",
+			 data: {userId:'aaaabbbbbccc'},
+             success: function(data){
+                $("#imageId").attr("src","https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket="+data);
+             }
+         });
+    });
+});
+
+</script>
+</html>
+
