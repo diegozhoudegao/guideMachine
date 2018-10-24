@@ -121,6 +121,10 @@ public class AccessModel {
     private String discussOp;					//评论0是1否
     private String setschemeGroupOp;            //设置方案分组权限
     private String taskDelegateOp;				//任务转交，0：是；1：否
-    private String dealOp;//处理
+    private String dealOp;						//处理
 
+    private String bindingOp;                 	//绑定景点0是1否
+    private String popOp;                 		//弹出0是1否
+    private String openOp;                 		//开仓0是1否
+    private String rebootOp;                 	//重启0是1否
 }

@@ -631,3 +631,21 @@ AND rp.status = '0'
 AND rm.status = '0'
 AND pm.status <> '1'
 AND dc.status = '0';
+
+-- ----------------------------
+-- View structure for `v_base_cabinetInfo`
+-- ----------------------------
+DROP VIEW IF EXISTS `v_base_cabinetInfo`;
+CREATE VIEW `v_base_cabinetInfo` AS 
+SELECT
+	-- 机柜信息
+	c.*,
+	s.province,
+	s.city,
+	s.county,
+	s.scenicSpotName
+FROM
+	t_base_cabinet c
+LEFT JOIN t_base_scenicSpot s ON c.scenicSpotId = s.id AND s. STATUS = '0'
+WHERE
+	c. STATUS = '0'
