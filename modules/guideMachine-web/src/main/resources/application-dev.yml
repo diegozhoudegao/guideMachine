@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/sharedGuideMachine
     username: root
-    password: root
+    password: 
   jpa:
     database: mysql
     show-sql: true
@@ -41,3 +41,7 @@ wx:
     appId: wx17643dc63677c18a
     mchId: wx17643dc63677c18a
     mchKey: wx17643dc63677c18a
+  gzh:
+    appId: wxef2f68e44bfba607
+    appSecret: 4133a38f80e79735eb3b9bc788403b6f
+    messageTemplateId: UCRU2lPikaAZnOR9z2sWtEaC5V-d9xea9BmFkRqHCRc
