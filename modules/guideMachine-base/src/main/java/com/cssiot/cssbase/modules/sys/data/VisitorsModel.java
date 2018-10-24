@@ -47,7 +47,7 @@ public class VisitorsModel {
 	private String alipayNo;
 	
 	@ApiModelProperty(value="姓名")
-	private String userName;
+	private String visitorsName;
 	
 	@ApiModelProperty(value="性别")
 	private String sex;
@@ -101,7 +101,7 @@ public class VisitorsModel {
 		this.identityCard = visitors.getIdentityCard();
 		this.wechatNo = visitors.getWechatNo();
 		this.alipayNo = visitors.getAlipayNo();
-		this.userName = visitors.getUserName();
+		this.visitorsName = visitors.getVisitorsName();
 		this.sex = visitors.getSex();
 		this.nativePlace = visitors.getNativePlace();
 		this.nation = visitors.getNation();

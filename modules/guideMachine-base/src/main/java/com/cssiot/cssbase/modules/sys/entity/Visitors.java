@@ -65,8 +65,8 @@ public class Visitors extends CommonFields{
 	private String alipayNo;
 	
 	@ApiModelProperty(value="姓名")
-	@Column(name="userName")
-	private String userName;
+	@Column(name="visitorsName")
+	private String visitorsName;
 	
 	@ApiModelProperty(value="性别")
 	@Column(name="sex")
@@ -140,7 +140,7 @@ public class Visitors extends CommonFields{
 		this.identityCard = visitors.getIdentityCard();
 		this.wechatNo = visitors.getWechatNo();
 		this.alipayNo = visitors.getAlipayNo();
-		this.userName = visitors.getUserName();
+		this.visitorsName = visitors.getVisitorsName();
 		this.sex = visitors.getSex();
 		this.nativePlace = visitors.getNativePlace();
 		this.nation = visitors.getNation();

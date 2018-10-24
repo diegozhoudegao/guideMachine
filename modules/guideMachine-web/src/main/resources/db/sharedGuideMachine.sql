@@ -185,7 +185,7 @@ CREATE TABLE `t_sys_visitors` (
   `identityCard` varchar(64) DEFAULT NULL COMMENT '身份证',
   `wechatNo` varchar(64) DEFAULT NULL COMMENT '微信号',
   `alipayNo` varchar(64) DEFAULT NULL COMMENT '支付宝号',
-  `userName` varchar(64) DEFAULT NULL COMMENT '姓名',
+  `visitorsName` varchar(64) DEFAULT NULL COMMENT '游客姓名',
   `sex` varchar(64) DEFAULT NULL COMMENT '性别',
   `nativePlace` varchar(64) DEFAULT NULL COMMENT '籍贯',
   `nation` varchar(64) DEFAULT NULL COMMENT '民族',
