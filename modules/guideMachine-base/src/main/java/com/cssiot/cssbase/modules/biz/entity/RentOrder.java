@@ -89,6 +89,18 @@ public class RentOrder extends CommonFields{
 	@Column(name="transactionNo")
 	private String transactionNo;
 	
+	@ApiModelProperty(value="游客Id")
+	@Column(name="visitorsId")
+	private String visitorsId;
+	
+	@ApiModelProperty(value="景点id")
+	@Column(name="scenicSpotId")
+	private String scenicSpotId;
+	
+	@ApiModelProperty(value="机柜id")
+	@Column(name="cabinetId")
+	private String cabinetId;
+	
 	public RentOrder(RentOrderModel rentOrder) {
 		super();
 		this.orderNo = rentOrder.getOrderNo();

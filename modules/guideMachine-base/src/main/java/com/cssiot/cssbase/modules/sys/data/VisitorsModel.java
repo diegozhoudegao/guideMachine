@@ -1,7 +1,10 @@
 package com.cssiot.cssbase.modules.sys.data;
 
 import java.util.Date;
+
 import com.cssiot.cssbase.modules.sys.entity.Visitors;
+
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -34,9 +37,14 @@ public class VisitorsModel {
 	@ApiModelProperty(value="注册景点id")
 	private String scenicSpotId;
 	
+	@ApiModelProperty(value="注册景点名称")
+	private String scenicSpotName;
+	
+	@Excel(name = "手机", orderNum = "0")
 	@ApiModelProperty(value="手机")
 	private String phone;
 	
+	@Excel(name = "身份证", orderNum = "1")
 	@ApiModelProperty(value="身份证")
 	private String identityCard;
 
@@ -79,6 +87,7 @@ public class VisitorsModel {
 	@ApiModelProperty(value="归还状态(0未归还、1已归还)")
 	private String returnStatus;
 	
+	@Excel(name = "说明", orderNum = "2",width=20)
 	@ApiModelProperty(value="VIP说明")
 	private String vipRemark;
 	

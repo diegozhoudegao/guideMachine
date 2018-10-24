@@ -1,9 +1,13 @@
 package com.cssiot.cssbase.modules.biz.data;
 
 import java.util.Date;
+
+import javax.persistence.Column;
+
 import com.cssiot.cssbase.modules.biz.entity.RentOrder;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 租借订单表信息
@@ -11,6 +15,7 @@ import lombok.Data;
  *	2018-10-05 athena 创建
  */
 @Data
+@NoArgsConstructor
 public class RentOrderModel {
 	
 	@ApiModelProperty(value="订单id")
@@ -67,6 +72,34 @@ public class RentOrderModel {
 	@ApiModelProperty(value="交易编号")
 	private String transactionNo;
 
+	@ApiModelProperty(value="游客Id")
+	@Column(name="visitorsId")
+	private String visitorsId;
+	
+	@ApiModelProperty(value="注册景点id")
+	@Column(name="scenicSpotId")
+	private String scenicSpotId;
+	
+	@ApiModelProperty(value="省份")
+	@Column(name="province")
+	private String province;
+
+	@ApiModelProperty(value="城市")
+	@Column(name="city")
+	private String city;
+	
+	@ApiModelProperty(value="区县")
+	@Column(name="county")
+	private String county;
+	
+	@ApiModelProperty(value="景点名称")
+	@Column(name="scenicSpotName")
+	private String scenicSpotName;
+	
+	@ApiModelProperty(value="机柜id")
+	@Column(name="cabinetId")
+	private String cabinetId;
+	
 	public RentOrderModel(RentOrder rentOrder) {
 		super();
 		this.rentOrderId = rentOrder.getId();
@@ -87,6 +120,9 @@ public class RentOrderModel {
 		this.orderPayStatus = rentOrder.getOrderPayStatus();
 		this.rentUser=rentOrder.getRentUser();
 		this.transactionNo=rentOrder.getTransactionNo();
+		this.visitorsId = rentOrder.getVisitorsId();
+		this.scenicSpotId = rentOrder.getScenicSpotId();
+		this.cabinetId = rentOrder.getCabinetId();
 	}
 	
 }

@@ -2,6 +2,11 @@ package com.cssiot.cssbase.modules.sys.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import com.cssiot.cssbase.modules.sys.entity.Visitors;
 import com.cssiot.cssutil.common.service.BaseService;
 
@@ -61,4 +66,118 @@ public interface VisitorsService extends BaseService<Visitors>{
      * 	2018-10-14 Diego.zhou 新建
      */
     public void doSendTemplateMsg(String openid,String formId,String templateId,List dataList);
+    
+    
+    /**
+     * 游客信息查询接口
+     * @param jsonStr 查询条件
+     * @param userId 当前登录者Id
+     * @param token token令牌
+     * @return
+     * @author 
+     * 	2018-10-22 Diego.zhou 新建
+     */
+    public Object doSelectVisitorsInfo(HttpServletRequest request, HttpServletResponse response,String jsonStr,String pageNo,String pageSize,String userId,String token);
+    
+    /**
+     * VIP游客新建保存接口
+     * @param jsonStr 保存JSOn
+     * @param userId 当前登录者Id
+     * @param token token令牌
+     * @return null
+     * @author 
+     * 	2018-10-22 Diego.zhou 新建
+     */
+    public Object doSaveVIPVisitorsInfo(String jsonStr,String userId,String token);
+    
+    /**
+     * VIP模板导出接口
+     * @return
+     */
+    public Object doExportVIPVisitorsTemplateInfo(HttpServletResponse response);
+    
+    /**
+     * VIP游客信息导入接口
+     * @return
+     */
+    public Object doImportVIPVisitorsInfo(MultipartFile file,String token,String userId);
+    
+    /**
+     * 游客信息修改初始化接口
+     * @param visitorsId 游客Id
+     * @param userId 当前登录者Id
+     * @param token token令牌
+     * @return VisitorsModel
+     * @author 
+     * 	2018-10-22 Diego.zhou 新建
+     */
+    @SuppressWarnings("all")
+    public Object doUpdateVisitorsData(String visitorsId,String userId,String token);
+    
+    /**
+     * 游客信息修改保存接口
+     * @param jsonStr
+     * @param userId 当前登录者Id
+     * @param token token令牌
+     * @return null
+     * @author 
+     * 	2018-10-22 Diego.zhou 新建
+     */
+    public Object doUpdateVisitorsInfo(String jsonStr,String userId,String token);
+    
+    /**
+     * 手动加入黑名单接口
+     * @param visitorsId 游客Id
+     * @param userId 当前登录者Id
+     * @param token token令牌
+     * @return
+     * @author
+     * 	2018-10-24 Diego.zhou 新建
+     */
+    public Object doJoinBlacklistInfo(String visitorsId,String userId,String token);
+    
+    /**
+     * 手动取消黑名单接口
+     * @param visitorsId 游客Id
+     * @param userId 当前登录者Id
+     * @param token token令牌
+     * @return
+     * @author
+     * 	2018-10-24 Diego.zhou 新建
+     */
+    public Object doCancelBlacklistInfo(String visitorsId,String userId,String token);
+    
+    /**
+     * 普通游客转Vip
+     * @param visitorsId 游客Id
+     * @param userId 当前登录者Id
+     * @param token token令牌
+     * @return
+     * @author
+     * 	2018-10-24 Diego.zhou 新建
+     */
+    public Object doUpdateNormalVisitorsToVipInfo(String visitorsId,String userId,String token);
+    
+    /**
+     * Vip游客转普通游客
+     * @param visitorsId 游客Id
+     * @param userId 当前登录者Id
+     * @param token token令牌
+     * @return
+     * @author
+     * 	2018-10-24 Diego.zhou 新建
+     */
+    public Object doUpdateVipVisitorsToNormalInfo(String visitorsId,String userId,String token);
+    
+    /**
+     * 游客租借历史查询接口
+     * @param request
+     * @param response
+     * @param visitorsId 游客Id
+     * @param userId 当前登录者Id
+     * @param token token令牌
+     * @return
+     * 	2018-10-24 Diego.zhou 新建
+     */
+    public Object doSelctVisitorsRentHistoryInfo(HttpServletRequest request, HttpServletResponse response,String visitorsId,String userId,String token);
 }
