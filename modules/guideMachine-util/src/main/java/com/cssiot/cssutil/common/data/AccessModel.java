@@ -127,4 +127,6 @@ public class AccessModel {
     private String popOp;                 		//弹出0是1否
     private String openOp;                 		//开仓0是1否
     private String rebootOp;                 	//重启0是1否
+    private String refreshOp;                 	//刷新0是1否
+    
 }
