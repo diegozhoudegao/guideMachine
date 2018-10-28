@@ -679,3 +679,43 @@ AND g. STATUS = '0'
 AND c.guideMachineStatus = g.guideMachineNo
 WHERE
 	c. STATUS = '0'
+
+-- ----------------------------
+-- View structure for `v_sys_userRoleInfo`
+-- ----------------------------
+DROP VIEW IF EXISTS `v_sys_userRoleInfo`;
+CREATE VIEW `v_sys_userRoleInfo` AS 
+SELECT 
+	ur.roleId,role.roleName,ur.userId
+FROM t_sys_role role, t_sys_userrole ur
+WHERE ur.roleId = role.id
+
+
+-- ----------------------------
+-- View structure for `v_sys_userCityManageInfo`
+-- ----------------------------
+DROP VIEW IF EXISTS `v_sys_userCityManageInfo`;
+CREATE VIEW `v_sys_userCityManageInfo` AS 
+SELECT 
+	ucm.province,ucm.city,ucm.county,ucm.scenicSpotId,ss.scenicSpotName,ucm.userId
+FROM t_sys_usercitymanage ucm,t_base_scenicspot ss
+WHERE ucm.scenicSpotId = ss.id
+
+-- ----------------------------
+-- View structure for `v_base_userRoleCityManageInfo`
+-- ----------------------------
+DROP VIEW IF EXISTS `v_sys_userRoleCityManageInfo`;
+CREATE VIEW `v_sys_userRoleCityManageInfo` AS 
+SELECT 
+	users.*,
+	one.roleName,
+	one.roleId,
+	two.city,
+	two.county,
+	two.province,
+	two.scenicSpotId,
+	two.scenicSpotName
+FROM t_sys_user users
+LEFT JOIN v_sys_userRoleInfo one on users.id = one.userId
+LEFT JOIN v_sys_userCityManageInfo two ON users.id = two.userId
+WHERE users.status<>'1'

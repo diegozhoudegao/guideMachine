@@ -21,7 +21,7 @@ public class CommonFields {
 	@Id
 	@GenericGenerator(name="hibernate-uuid",strategy="uuid")
 	@GeneratedValue(generator="hibernate-uuid")
-	@Column(name="id_")
+	@Column(name="id")
 	private String id;	
 
 	//创建人

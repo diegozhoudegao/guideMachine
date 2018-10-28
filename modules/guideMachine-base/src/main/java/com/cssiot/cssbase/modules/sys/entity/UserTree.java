@@ -25,7 +25,7 @@ public class UserTree {
 	
 	@ApiModelProperty(value="权限id")
 	@ManyToOne
-	@JoinColumn(name = "permissionId_",referencedColumnName="id_")
+	@JoinColumn(name = "permissionId",referencedColumnName="id")
 	private Permission permission;
 	
 	@ApiModelProperty(value="标识")
