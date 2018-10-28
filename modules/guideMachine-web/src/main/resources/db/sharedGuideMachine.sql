@@ -652,3 +652,30 @@ FROM
 LEFT JOIN t_base_scenicSpot s ON c.scenicSpotId = s.id AND s. STATUS = '0'
 WHERE
 	c. STATUS = '0'
+	
+-- ----------------------------
+-- View structure for `v_base_channelInfo`
+-- ----------------------------
+DROP VIEW IF EXISTS `v_base_channelInfo`;
+CREATE VIEW `v_base_channelInfo` AS 
+SELECT
+	-- 仓道导游机信息
+	c.id,
+	c.cabinetId,
+	c.channelStatus,
+	c.position,
+	c.guideMachineStatus,
+	g.imetNo,
+	g.guideMachineNo,
+	g.rentStatus,
+	g.temperatureStatus,
+	g.machineStatus,
+	g.positionStatus,
+	g.electricityStatus
+FROM
+	t_base_channel c
+LEFT JOIN t_base_guidemachine g ON c.id = g.channelId
+AND g. STATUS = '0'
+AND c.guideMachineStatus = g.guideMachineNo
+WHERE
+	c. STATUS = '0'
