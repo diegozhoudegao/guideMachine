@@ -329,7 +329,7 @@ public class VisitorsServiceImpl extends BaseServiceImpl<Visitors> implements Vi
 			}
     		if(!ChkUtil.isEmpty(json.get("registerTimeEnd"))){
 				String registerTimeEnd = json.getString("registerTimeEnd");
-				property=property+" and registerTimeS <=:registerTimeEnd ";
+				property=property+" and registerTime <=:registerTimeEnd ";
 				parameter.put("registerTimeEnd", registerTimeEnd);
 			}
     		//手机号

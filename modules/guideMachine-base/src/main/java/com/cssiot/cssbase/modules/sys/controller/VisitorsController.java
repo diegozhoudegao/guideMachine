@@ -1,5 +1,6 @@
 package com.cssiot.cssbase.modules.sys.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import com.cssiot.cssbase.modules.sys.service.VisitorsService;
 import com.cssiot.cssutil.common.enums.ResultEnum;
 import com.cssiot.cssutil.common.utils.ResultUtil;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 
@@ -30,31 +33,150 @@ public class VisitorsController {
 	@Autowired
 	private VisitorsService visitorsService;
 	
-	/**
-	 * VIP游客导入模板下载接口
-	 * @param response
-	 * @author 
-	 * 	2018-10-23 Diego.zhou 新建
-	 */
 	@ApiOperation("VIP游客导入模板下载接口")
-	@GetMapping("/doExportVIPVisitorsTemplateInfo")
-	public void doExportVIPVisitorsTemplateInfo(HttpServletResponse response) {
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
+		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
+	})
+	@GetMapping("/doExportVIPVisitorsTemplateInfo/{token}/{loginName}")
+	public void doExportVIPVisitorsTemplateInfo(HttpServletResponse response,@PathVariable("token") String token,@PathVariable("userId")String userId) {
 		visitorsService.doExportVIPVisitorsTemplateInfo(response);
 	}
 	
-	/**
-	 * VIP游客数据导入接口
-	 * @param file 附件
-	 * @param token token令牌
-	 * @param userId 当前登录者Id
-	 * @return
-	 * @author 
-	 * 	2018-1023 DIego.zhou 新建
-	 */
 	@ApiOperation("VIP游客数据导入接口")
-	@PostMapping(value = "/doImportVIPVisitorsInfo", consumes = "multipart/*", headers = "content-type=multipart/form-data")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
+		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
+	})
+	@PostMapping(value = "/doImportVIPVisitorsInfo/{token}/{userId}", consumes = "multipart/*", headers = "content-type=multipart/form-data")
 	public Object doImportVIPVisitorsInfo(@ApiParam(value = "上传文件", required = true) MultipartFile file,@PathVariable("token") String token,@PathVariable("userId")String userId) {
 		Object result = visitorsService.doImportVIPVisitorsInfo(file, token, userId);
 		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
 	}
+	
+	@ApiOperation("游客信息查询接口")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
+		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
+		@ApiImplicitParam(paramType="query",name="jsonStr",dataType="String",required=false,value="查询条件jsonStr:{province:'省份',city:'城市',"
+				+ "county:'区县',scenicSpotId:'注册景点Id',registerTimeStart:'注册时间起始',registerTimeEnd:'注册时间终止',"
+				+ "phone:'手机',identityCard:'身份证号',visitorsType:'游客类型(0普通、1VIP、空为全部)',returnStatus:'归还状态(0已归还、1未归还、空为全部)',"
+				+ "isBlacklist:'是否黑名单(0是、1否、空为全部)',orderBy:'排序方式'}"),
+		@ApiImplicitParam(paramType="query",name="pageNo",dataType="String",required=true,value="页码"),
+		@ApiImplicitParam(paramType="query",name="pageSize",dataType="String",required=true,value="一页条数")
+	})
+	@SuppressWarnings("all")
+	@PostMapping(value="/doSelectVisitorsInfo/{token}/{userId}")
+	public Object doSelectVisitorsInfo(@PathVariable("token") String token,@PathVariable("userId")String userId,String jsonStr,
+			String pageSize,String pageNo,HttpServletRequest request,HttpServletResponse response){
+		Object result = visitorsService.doSelectVisitorsInfo(request, response, jsonStr, pageNo, pageSize, userId, token);
+		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
+	}
+	
+	@ApiOperation("游客信息保存接口")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
+		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
+		@ApiImplicitParam(paramType="query",name="jsonStr",dataType="String",required=true,value="保存jsonStr:{visitors:{phone:'手机号',identityCard:'身份证',vipRemark:'VIP说明'}}"),
+	})
+	@SuppressWarnings("all")
+	@PostMapping(value="/doSaveVIPVisitorsInfo/{token}/{userId}")
+	public Object doSaveVIPVisitorsInfo(@PathVariable("token") String token,@PathVariable("userId")String userId,String jsonStr){
+		Object result = visitorsService.doSaveVIPVisitorsInfo(jsonStr, userId, token);
+		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
+	}
+	
+	@ApiOperation("游客信息修改初始化接口")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
+		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
+		@ApiImplicitParam(paramType="query",name="visitorsId",dataType="String",required=true,value="游客Id"),
+	})
+	@SuppressWarnings("all")
+	@PostMapping(value="/doUpdateVisitorsData/{token}/{userId}")
+	public Object doUpdateVisitorsData(@PathVariable("token") String token,@PathVariable("userId")String userId,String visitorsId){
+		Object result = visitorsService.doUpdateVisitorsData(visitorsId, userId, token);
+		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
+	}
+	
+	@ApiOperation("游客信息修改保存接口")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
+		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
+		@ApiImplicitParam(paramType="query",name="jsonStr",dataType="String",required=true,value="保存jsonStr:{visitors:{visitorsId:'游客Id',alipayNo:'支付宝账号',"
+				+ "visitorsName:'姓名',identityCard:'身份证',sex:'性别',nation:'民族',birthDate:'出生日期',homeAddress:'地址',"
+				+ "phone:'手机号',wechatNo:'微信号'}}"),
+	})
+	@SuppressWarnings("all")
+	@PostMapping(value="/doUpdateVisitorsInfo/{token}/{userId}")
+	public Object doUpdateVisitorsInfo(@PathVariable("token") String token,@PathVariable("userId")String userId,String jsonStr){
+		Object result = visitorsService.doSaveVIPVisitorsInfo(jsonStr, userId, token);
+		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
+	}
+	
+	@ApiOperation("手动加入黑名单接口")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
+		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
+		@ApiImplicitParam(paramType="query",name="visitorsId",dataType="String",required=true,value="游客Id"),
+	})
+	@SuppressWarnings("all")
+	@PostMapping(value="/doJoinBlacklistInfo/{token}/{userId}")
+	public Object doJoinBlacklistInfo(@PathVariable("token") String token,@PathVariable("userId")String userId,String visitorsId){
+		Object result = visitorsService.doJoinBlacklistInfo(visitorsId, userId, token);
+		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
+	}
+	
+	@ApiOperation("手动取消黑名单接口")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
+		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
+		@ApiImplicitParam(paramType="query",name="visitorsId",dataType="String",required=true,value="游客Id"),
+	})
+	@SuppressWarnings("all")
+	@PostMapping(value="/doCancelBlacklistInfo/{token}/{userId}")
+	public Object doCancelBlacklistInfo(@PathVariable("token") String token,@PathVariable("userId")String userId,String visitorsId){
+		Object result = visitorsService.doCancelBlacklistInfo(visitorsId, userId, token);
+		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
+	}
+	
+	@ApiOperation("普通游客转Vip")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
+		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
+		@ApiImplicitParam(paramType="query",name="visitorsId",dataType="String",required=true,value="游客Id"),
+	})
+	@SuppressWarnings("all")
+	@PostMapping(value="/doUpdateNormalVisitorsToVipInfo/{token}/{userId}")
+	public Object doUpdateNormalVisitorsToVipInfo(@PathVariable("token") String token,@PathVariable("userId")String userId,String visitorsId){
+		Object result = visitorsService.doUpdateNormalVisitorsToVipInfo(visitorsId, userId, token);
+		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
+	}
+	
+	@ApiOperation("Vip游客转普通游客")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
+		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
+		@ApiImplicitParam(paramType="query",name="visitorsId",dataType="String",required=true,value="游客Id"),
+	})
+	@SuppressWarnings("all")
+	@PostMapping(value="/doUpdateVipVisitorsToNormalInfo/{token}/{userId}")
+	public Object doUpdateVipVisitorsToNormalInfo(@PathVariable("token") String token,@PathVariable("userId")String userId,String visitorsId){
+		Object result = visitorsService.doUpdateVipVisitorsToNormalInfo(visitorsId, userId, token);
+		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
+	}
+	
+	@ApiOperation("游客租借历史查询接口")
+	@ApiImplicitParams({
+		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
+		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
+		@ApiImplicitParam(paramType="query",name="visitorsId",dataType="String",required=true,value="游客Id"),
+	})
+	@SuppressWarnings("all")
+	@PostMapping(value="/doSelctVisitorsRentHistoryInfo/{token}/{userId}")
+	public Object doSelctVisitorsRentHistoryInfo(@PathVariable("token") String token,@PathVariable("userId")String userId,HttpServletRequest request, HttpServletResponse response,String visitorsId){
+		Object result = visitorsService.doSelctVisitorsRentHistoryInfo(request, response, visitorsId, userId, token);
+		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
+	}
+	
 }
