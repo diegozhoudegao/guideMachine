@@ -23,19 +23,19 @@ public class UserModel {
 	@ApiModelProperty(value="员工id")
 	private String userId;
 	
-	@Excel(name = "姓名", orderNum = "0")
+	@Excel(name = "姓名", orderNum = "0",width=20)
 	@ApiModelProperty(value="姓名")
 	private String userName;
 	
-	@Excel(name = "账号", orderNum = "1")
+	@Excel(name = "账号", orderNum = "1",width=20)
 	@ApiModelProperty(value="账号")
 	private String loginName;
 	
-	@Excel(name = "手机号", orderNum = "2")
+	@Excel(name = "手机号", orderNum = "2",width=20)
 	@ApiModelProperty(value="手机")
 	private String phone;
 
-	@Excel(name = "密码", orderNum = "3")
+	@Excel(name = "密码", orderNum = "3",width=20)
 	@ApiModelProperty(value="密码")
 	private String password;
 	
@@ -44,6 +44,9 @@ public class UserModel {
 	
 	@ApiModelProperty(value="角色名称")
 	private String roleName;
+	
+	@ApiModelProperty(value="状态(0:在职，1:删除，2:离职)")
+	private String status;
 
 	@ApiModelProperty(value="管理城市集合")
 	private List<UserCityManageModel> manageList;
@@ -64,6 +67,7 @@ public class UserModel {
 		this.phone = userInfo.getPhone();
 		this.roleId = userInfo.getRoleId();
 		this.roleName = userInfo.getRoleName();
+		this.status = userInfo.getStatus();
 //		this.password = userInfo.getPassword();
 	}
 

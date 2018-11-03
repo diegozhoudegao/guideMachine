@@ -229,8 +229,14 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     		//姓名
     		if(!ChkUtil.isEmpty(json.get("userName"))){
 				String userName = json.getString("userName");
-				property=property+" and userName like userName ";
+				property=property+" and userName like:userName ";
 				parameter.put("userName", "%"+userName+"%");
+			}
+    		//角色Id
+    		if(!ChkUtil.isEmpty(json.get("roleId"))){
+				String roleId = json.getString("roleId");
+				property=property+" and roleId =:roleId ";
+				parameter.put("roleId", roleId);
 			}
 			if(!ChkUtil.isEmpty(json.get("orderBy"))){
 				orderBy=json.get("orderBy").toString();
@@ -350,6 +356,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 		user.setCreateUser(userId);
 		user.setLastUpdateTime(new Date());
 		user.setLastUpdateUser(userId);
+		user.setStatus(StateEnum.NEWSTATE.getCode());
 		userDao.save(user);
 		//判断是否存在手机号为userModel.getPhone的游客，若存在，将其加入VIP,不存在，新建VIP游客
 		Visitors existVisitors = visitorsService.getByHql("from Visitors where status<>'"+StateEnum.DELETESTATE.getCode()+"' and phone='"+userModel.getPhone()+"'");
@@ -449,7 +456,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 	@Override
 	public Object doExportUsersTemplateInfo(HttpServletResponse response) {
 		// 导出操作
-		EasyPoiFileUtil.exportExcel(null, "员工信息", "sheet1", UserModel.class, "员工信息导入模板.xls", response);
+		EasyPoiFileUtil.exportExcel(new ArrayList<>(), "员工信息", "sheet1", UserModel.class, "员工信息导入模板.xls", response);
 		return null;
 	}
 
@@ -523,6 +530,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 				user.setCreateUser(userId);
 				user.setLastUpdateTime(new Date());
 				user.setLastUpdateUser(userId);
+				user.setStatus(StateEnum.NEWSTATE.getCode());
 				userDao.save(user);
 				//判断是否存在手机号为userModel.getPhone的游客，若存在，将其加入VIP,不存在，新建VIP游客
 				Visitors existVisitors = visitorsService.getByHql("from Visitors where status<>'"+StateEnum.DELETESTATE.getCode()+"' and phone='"+userModel.getPhone()+"'");
@@ -573,6 +581,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 				throw new ResultException(-2, "该游客数据异常！", token, userId, null);
 	    	}
 			UserModel userModel = new UserModel(user);
+			userModel.setPassword(null);
 			//获取用户角色信息
 			List<UserRole> urList = userRoleService.findByHql("from UserRole where status='"+StateEnum.NEWSTATE.getCode()+"' and userId='"+usersId+"'");
 			if(!ChkUtil.isEmptyAllObject(urList)) {

@@ -32,7 +32,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan(basePackages={"com.cssiot.cssbase","com.cssiot.cssweb"})
+@ComponentScan(basePackages={"com.cssiot.cssbase","com.cssiot.cssutil","com.cssiot.cssweb"})
 @ImportResource(locations = {"classpath:applicationContext.xml"})
 @PropertySource(value={"classpath:moduleOperate.properties","classpath:common.properties"})
 @EnableSwagger2

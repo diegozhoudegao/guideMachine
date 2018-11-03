@@ -39,7 +39,7 @@ public class UserController {
 		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
 		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
 	})
-	@GetMapping("/doExportUsersTemplateInfo/{token}/{loginName}")
+	@GetMapping("/doExportUsersTemplateInfo/{token}/{userId}")
 	public void doExportUsersTemplateInfo(HttpServletResponse response,@PathVariable("token") String token,@PathVariable("userId")String userId) {
 		userService.doExportUsersTemplateInfo(response);
 	}
@@ -61,7 +61,7 @@ public class UserController {
 		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
 		@ApiImplicitParam(paramType="query",name="jsonStr",dataType="String",required=false,value="查询条件jsonStr:{province:'省份',city:'城市',"
 				+ "county:'区县',scenicSpotId:'注册景点Id',"
-				+ "phone:'手机',roleId:'角色Id',loginName:'登录名',userName:'账号',"
+				+ "phone:'手机',roleId:'角色Id',loginName:'账号',userName:'姓名',"
 				+ "orderBy:'排序方式'}"),
 		@ApiImplicitParam(paramType="query",name="pageNo",dataType="String",required=true,value="页码"),
 		@ApiImplicitParam(paramType="query",name="pageSize",dataType="String",required=true,value="一页条数")
@@ -78,7 +78,8 @@ public class UserController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
 		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
-		@ApiImplicitParam(paramType="query",name="jsonStr",dataType="String",required=true,value="保存jsonStr:{userModel:{phone:'手机号'}}"),
+		@ApiImplicitParam(paramType="query",name="jsonStr",dataType="String",required=true,value="保存jsonStr:{userModel:{userName:'姓名',roleId:'角色Id',"
+				+ "loginName:'账号',phone:'手机',password:'密码',manageList:[{province:'省份',city:'城市',county:'区县',scenicSpotId:'景点Id'}]}}"),
 	})
 	@SuppressWarnings("all")
 	@PostMapping(value="/doSaveUsersInfo/{token}/{userId}")
@@ -104,9 +105,8 @@ public class UserController {
 	@ApiImplicitParams({
 		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
 		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
-		@ApiImplicitParam(paramType="query",name="jsonStr",dataType="String",required=true,value="保存jsonStr:{visitors:{visitorsId:'游客Id',alipayNo:'支付宝账号',"
-				+ "visitorsName:'姓名',identityCard:'身份证',sex:'性别',nation:'民族',birthDate:'出生日期',homeAddress:'地址',"
-				+ "phone:'手机号',wechatNo:'微信号'}}"),
+		@ApiImplicitParam(paramType="query",name="jsonStr",dataType="String",required=true,value="保存jsonStr:{userModel:{userId:'员工Id',userName:'姓名',roleId:'角色Id',"
+				+ "loginName:'账号',phone:'手机',password:'密码',manageList:[{province:'省份',city:'城市',county:'区县',scenicSpotId:'景点Id'}]}}"),
 	})
 	@SuppressWarnings("all")
 	@PostMapping(value="/doUpdateUsersInfo/{token}/{userId}")

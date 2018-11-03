@@ -48,8 +48,8 @@ public class UserCityManageModel {
 
 	@Override
 	public String toString() {
-		return "UserCityManageModel [province=" + province + ", city=" + city + ", county=" + county + ", scenicSpotId="
-				+ scenicSpotId + "]";
+		return "province=" + province + ", city=" + city + ", county=" + county + ", scenicSpotId="
+				+ scenicSpotId;
 	}
 
 	@Override

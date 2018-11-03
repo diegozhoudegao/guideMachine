@@ -413,7 +413,7 @@ public class VisitorsServiceImpl extends BaseServiceImpl<Visitors> implements Vi
      * 	2018-10-22 Diego.zhou 新建
      */
     @Override
-    public Object doSaveVIPVisitorsInfo(String jsonStr,String userId,String token) {
+    public Object doSaveVipVisitorsInfo(String jsonStr,String userId,String token) {
     	// JSON校验
 		OptionUtil.of(jsonStr)
 				.getOrElseThrow(() -> new ResultException(ResultEnum.JSONSTR_NULL, token, userId, null));
@@ -431,7 +431,7 @@ public class VisitorsServiceImpl extends BaseServiceImpl<Visitors> implements Vi
 			throw new ResultException(-2, "VIP游客数据为空！", token, userId, null);
 		}
 		//手机号或者身份证号二选一，说明为必填项
-		if(ChkUtil.isEmptyAllObject(visitorsModel.getPhone()) || ChkUtil.isEmptyAllObject(visitorsModel.getIdentityCard())) {
+		if(ChkUtil.isEmptyAllObject(visitorsModel.getPhone()) && ChkUtil.isEmptyAllObject(visitorsModel.getIdentityCard())) {
 			throw new ResultException(-2, "手机号或者身份证号至少填写一个！", token, userId, null);
 		}
 		//手机号格式校验
@@ -457,6 +457,20 @@ public class VisitorsServiceImpl extends BaseServiceImpl<Visitors> implements Vi
 		}
 		if(!vipRemarkMap.get("code").equals("1")){
 			throw new ResultException(-2, vipRemarkMap.get("message").toString(), token, userId, null);
+		}
+		//存在校验
+		if(!ChkUtil.isEmptyAllObject(visitorsModel.getPhone())) {
+			String property = "from Visitors where status<>'"+StateEnum.DELETESTATE.getCode()+"' and phone='"+visitorsModel.getPhone()+"'";
+			Visitors exist = visitorsDao.getByHql(property);
+			if(null != exist) {
+				throw new ResultException(-2, "已存在手机号为："+visitorsModel.getPhone()+"的游客信息！", token, userId, null);
+			}
+		}else if(!ChkUtil.isEmptyAllObject(visitorsModel.getIdentityCard())) {
+			String property = "from Visitors where status<>'"+StateEnum.DELETESTATE.getCode()+"' and identityCard='"+visitorsModel.getIdentityCard()+"'";
+			Visitors exist = visitorsDao.getByHql(property);
+			if(null != exist) {
+				throw new ResultException(-2, "已存在身份证号为："+visitorsModel.getIdentityCard()+"的游客信息！", token, userId, null);
+			}
 		}
 		//保存VIP游客信息
 		Visitors visitors = new Visitors();
@@ -506,6 +520,9 @@ public class VisitorsServiceImpl extends BaseServiceImpl<Visitors> implements Vi
 				ScenicSpot ss = scenicSpotService.get(visitors.getScenicSpotId());
 				if(null != ss) {
 					visitorModel.setScenicSpotName(ss.getScenicSpotName());
+					visitorModel.setProvince(ss.getProvince());
+					visitorModel.setCity(ss.getCity());
+					visitorModel.setCounty(ss.getCounty());
 				}
 			}
 			map.put("visitors", visitorModel);
@@ -566,9 +583,9 @@ public class VisitorsServiceImpl extends BaseServiceImpl<Visitors> implements Vi
 				visitors.setHomeAddress(visitorsModel.getHomeAddress());
 			}else {
 				//手机号、微信号、支付宝号
-				visitors.setPhone(visitors.getPhone());
-				visitors.setWechatNo(visitors.getWechatNo());
-				visitors.setAlipayNo(visitors.getAlipayNo());
+				visitors.setPhone(visitorsModel.getPhone());
+				visitors.setWechatNo(visitorsModel.getWechatNo());
+				visitors.setAlipayNo(visitorsModel.getAlipayNo());
 			}
 			visitors.setLastUpdateTime(new Date());
 			visitors.setLastUpdateUser(userId);
@@ -588,10 +605,9 @@ public class VisitorsServiceImpl extends BaseServiceImpl<Visitors> implements Vi
      * 	2018-10-23 Diego.zhou 新建
      */
 	@Override
-	public Object doExportVIPVisitorsTemplateInfo(HttpServletResponse response) {
+	public void doExportVipVisitorsTemplateInfo(HttpServletResponse response) {
 		// 导出操作
-		EasyPoiFileUtil.exportExcel(null, "VIP游客", "sheet1", VisitorsModel.class, "VIP游客信息导入模板.xls", response);
-		return null;
+		EasyPoiFileUtil.exportExcel(new ArrayList<>(), "VIP游客", "sheet1", VisitorsModel.class, "VIP游客信息导入模板.xls", response);
 	}
 
 	/**
@@ -602,13 +618,14 @@ public class VisitorsServiceImpl extends BaseServiceImpl<Visitors> implements Vi
      */
 	@Override
 	@SuppressWarnings("all")
-	public Object doImportVIPVisitorsInfo(MultipartFile file,String token,String userId) {
+	public Object doImportVipVisitorsInfo(MultipartFile file,String token,String userId) {
 		// 解析excel
 		List<VisitorsModel> visitorsList = EasyPoiFileUtil.importExcel(file, 1, 1, VisitorsModel.class);
 		if (!ChkUtil.isEmptyAllObject(visitorsList)) {
+			String property = null;
 			for (VisitorsModel visitorsModel : visitorsList) {
 				//手机号或者身份证号二选一，说明为必填项
-				if(ChkUtil.isEmptyAllObject(visitorsModel.getPhone()) || ChkUtil.isEmptyAllObject(visitorsModel.getIdentityCard())) {
+				if(ChkUtil.isEmptyAllObject(visitorsModel.getPhone()) && ChkUtil.isEmptyAllObject(visitorsModel.getIdentityCard())) {
 					throw new ResultException(-2, "手机号或者身份证号至少填写一个！", token, userId, null);
 				}
 				//手机号格式校验
@@ -634,6 +651,20 @@ public class VisitorsServiceImpl extends BaseServiceImpl<Visitors> implements Vi
 				}
 				if(!vipRemarkMap.get("code").equals("1")){
 					throw new ResultException(-2, vipRemarkMap.get("message").toString(), token, userId, null);
+				}
+				//存在校验
+				if(!ChkUtil.isEmptyAllObject(visitorsModel.getPhone())) {
+					property = "from Visitors where status<>'"+StateEnum.DELETESTATE.getCode()+"' and phone='"+visitorsModel.getPhone()+"'";
+					Visitors exist = visitorsDao.getByHql(property);
+					if(null != exist) {
+						throw new ResultException(-2, "已存在手机号为："+visitorsModel.getPhone()+"的游客信息！", token, userId, null);
+					}
+				}else if(!ChkUtil.isEmptyAllObject(visitorsModel.getIdentityCard())) {
+					property = "from Visitors where status<>'"+StateEnum.DELETESTATE.getCode()+"' and identityCard='"+visitorsModel.getIdentityCard()+"'";
+					Visitors exist = visitorsDao.getByHql(property);
+					if(null != exist) {
+						throw new ResultException(-2, "已存在身份证号为："+visitorsModel.getIdentityCard()+"的游客信息！", token, userId, null);
+					}
 				}
 				//保存VIP游客信息
 				Visitors visitors = new Visitors();
@@ -822,7 +853,7 @@ public class VisitorsServiceImpl extends BaseServiceImpl<Visitors> implements Vi
      * 	2018-10-24 Diego.zhou 新建
      */
 	@Override
-	public Object doSelctVisitorsRentHistoryInfo(HttpServletRequest request, HttpServletResponse response,
+	public Object doSelectVisitorsRentHistoryInfo(HttpServletRequest request, HttpServletResponse response,
 			String visitorsId, String userId, String token) {
 		Map map = new HashMap<>();
 		//游客Id校验
@@ -830,7 +861,7 @@ public class VisitorsServiceImpl extends BaseServiceImpl<Visitors> implements Vi
     		new ResultException(-2,"游客Id为空!", token, userId, null));
     	//租借订单查询接口
     	try {
-			List<RentOrder> rentOrderList = rentOrderService.findByHql("from RentOrder where state<>'"+StateEnum.DELETESTATE.getCode()+"' and visitorsId='"+visitorsId+"'");
+			List<RentOrder> rentOrderList = rentOrderService.findByHql("from RentOrder where status<>'"+StateEnum.DELETESTATE.getCode()+"' and visitorsId='"+visitorsId+"'");
 			if(!ChkUtil.isEmptyAllObject(rentOrderList)) {
 				List<RentOrderModel> rentList = new ArrayList<>();
 				RentOrderModel rentModel = null;
@@ -855,7 +886,7 @@ public class VisitorsServiceImpl extends BaseServiceImpl<Visitors> implements Vi
     	} catch (Exception e) {
 			throw new ResultException(-3, e.getMessage(), token, userId, null);
 		}
-		return null;
+		return map;
 	}
 	
 }

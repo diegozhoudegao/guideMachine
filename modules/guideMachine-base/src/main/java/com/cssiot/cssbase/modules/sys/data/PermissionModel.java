@@ -3,6 +3,7 @@ package com.cssiot.cssbase.modules.sys.data;
 import com.cssiot.cssbase.modules.sys.entity.Permission;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 权限表信息
@@ -10,6 +11,7 @@ import lombok.Data;
  *	2018-10-05 athena 创建
  */
 @Data
+@NoArgsConstructor
 public class PermissionModel {
 	
 	@ApiModelProperty(value="权限id")

@@ -12,7 +12,7 @@ public enum ResultEnum {
 	SELECT_SUCCESS(3,"查询成功！"),
 	SELECT_NULL(4,"不存在查询数据！"),
 	REDIS_NULL(5,"登录信息失效，请重新登录！"),
-	TOKEN_NULL(6,"token为空！登录信息失效，请重新登录！"),
+	TOKEN_NULL(6,"登录信息失效，请重新登录！"),
 	USERID_NULL(7,"用户id为空！"),
 	USER_ERROR(8,"用户信息参数不正确！"),
 	PASSWORD_ERROR(9,"密码不正确！"),

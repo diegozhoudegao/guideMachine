@@ -14,7 +14,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
  * @ClassName: JobUtil
  * @Description: 
  * @author 
- * 2018年9月27日  tck 创建
+ * 2018-10-20 Diego.zhou 新建
  */
 public class JobUtil {
 	

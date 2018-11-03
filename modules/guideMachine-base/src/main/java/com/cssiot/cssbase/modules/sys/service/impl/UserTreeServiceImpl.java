@@ -43,12 +43,13 @@ public class UserTreeServiceImpl extends BaseServiceImpl<UserTree> implements Us
 	 * @return treeText 树结构
 	 * @author
 	 *	2018-10-09 athena 迁移
+	 *	2018-11-04 Diego.zhou 修改传参以及校验方法
 	 */
 	@SuppressWarnings("all")
 	public Object getTreeText(String userId,String token,String clientType){
 		Map map = new HashMap<>();
 		List treeList = new ArrayList<>();
-		String sqlTree = "from UserTree model where model.userId='"+userId+"' and model.permission.name!='root' and (model.permission.schemeId='' or model.permission.schemeId is null or model.permission.schemeId='2' or model.permission.schemeId='1') and model.permission.state in('0','4','6','7') order by model.permission.number,model.permission.weight";
+		String sqlTree = "from UserTree model where model.userId='"+userId+"' and model.permission.name!='root' and model.permission.status in('0','4','6','7') order by model.permission.number,model.permission.weight";
 		List<UserTree> userPermissions=new ArrayList<>();
 		try {
 			userPermissions = userTreeDao.findByHql(sqlTree);

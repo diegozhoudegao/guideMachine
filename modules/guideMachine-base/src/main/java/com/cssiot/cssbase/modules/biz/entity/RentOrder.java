@@ -9,6 +9,7 @@ import com.cssiot.cssutil.common.entity.CommonFields;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * 租借订单表
@@ -17,6 +18,7 @@ import lombok.EqualsAndHashCode;
  */
 @Entity
 @Data
+@NoArgsConstructor
 @EqualsAndHashCode(callSuper=true)
 @Table(name = "t_biz_rentOrder")
 public class RentOrder extends CommonFields{
@@ -100,6 +102,10 @@ public class RentOrder extends CommonFields{
 	@ApiModelProperty(value="机柜id")
 	@Column(name="cabinetId")
 	private String cabinetId;
+	
+	@ApiModelProperty(value="是否已经过tcp消息处理(0:是，1否)")
+	@Column(name="isTcpRespHandled")
+	private String isTcpRespHandled;
 	
 	public RentOrder(RentOrderModel rentOrder) {
 		super();

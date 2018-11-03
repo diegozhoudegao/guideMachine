@@ -1,9 +1,6 @@
 package com.cssiot.cssbase.modules.quartz.config;
 
 
-import java.io.IOException;
-import java.util.Properties;
-
 import javax.sql.DataSource;
 
 import org.quartz.JobDetail;
@@ -13,7 +10,6 @@ import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
  * @ClassName: QuartzConfiguration
  * @Description: 
  * @author 
- * 2018年8月28日  tck 创建
+ * 	2018-10-20 Diego.zhou 新建
  */
 @Slf4j
 @Configuration
@@ -48,7 +44,7 @@ public class QuartzConfiguration {
      * @ClassName: AutowiringSpringBeanJobFactory
      * @Description: 
      * @author 
-     * 2018年8月28日  tck 创建
+     * 2018-10-20 Diego.zhou 新建
      */
     public static class AutowiringSpringBeanJobFactory extends SpringBeanJobFactory implements
             ApplicationContextAware {
@@ -131,13 +127,11 @@ public class QuartzConfiguration {
     @Bean
     public CronTriggerFactoryBean simpleJobTrigger(@Qualifier("simpleJobDetail") JobDetail jobDetail) {
         CronTriggerFactoryBean  factoryBean = new CronTriggerFactoryBean ();
-
         factoryBean.setJobDetail(jobDetail);
         factoryBean.setStartDelay(1000L);
         factoryBean.setName("trigger1");
         factoryBean.setGroup("group1");
-        //周1至周5，每天上午8点至下午18点，每分钟执行一次
-        factoryBean.setCronExpression("0 18 00 * * ?");
+        factoryBean.setCronExpression("0 0 18 * * ?");//每天18点执行
         return factoryBean;
     }
 

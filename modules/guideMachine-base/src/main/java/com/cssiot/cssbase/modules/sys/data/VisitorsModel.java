@@ -7,6 +7,7 @@ import com.cssiot.cssbase.modules.sys.entity.Visitors;
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 游客表信息
@@ -14,6 +15,7 @@ import lombok.Data;
  *	2018-10-05 athena 创建
  */
 @Data
+@NoArgsConstructor
 public class VisitorsModel {
 	
 	@ApiModelProperty(value="游客id")
@@ -40,11 +42,11 @@ public class VisitorsModel {
 	@ApiModelProperty(value="注册景点名称")
 	private String scenicSpotName;
 	
-	@Excel(name = "手机", orderNum = "0")
+	@Excel(name = "手机", orderNum = "0",width=20)
 	@ApiModelProperty(value="手机")
 	private String phone;
 	
-	@Excel(name = "身份证", orderNum = "1")
+	@Excel(name = "身份证", orderNum = "1",width=20)
 	@ApiModelProperty(value="身份证")
 	private String identityCard;
 
@@ -87,7 +89,7 @@ public class VisitorsModel {
 	@ApiModelProperty(value="归还状态(0未归还、1已归还)")
 	private String returnStatus;
 	
-	@Excel(name = "说明", orderNum = "2",width=20)
+	@Excel(name = "说明", orderNum = "2",width=40)
 	@ApiModelProperty(value="VIP说明")
 	private String vipRemark;
 	

@@ -63,7 +63,6 @@ public class WechatSendTemplateServiceImpl implements WechatSendTemplateService 
             String param = ResponseUtils.buildResultJson(paramMap);
             log.info("发送模板消息,请求url:{},参数:{}", url, param);
             String result = OkHttpUtil.postJsonParams(url, param,null,null,null);
-//            templetMsgResult = new Gson().fromJson(result, TemplateMsgResult.class);
             log.info("发送模板消息,返回结果:{}", result);
         } catch (Exception ex) {
         	log.error("发送微信模板消息异常:", ex);

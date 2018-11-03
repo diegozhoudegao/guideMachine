@@ -88,19 +88,19 @@ public interface VisitorsService extends BaseService<Visitors>{
      * @author 
      * 	2018-10-22 Diego.zhou 新建
      */
-    public Object doSaveVIPVisitorsInfo(String jsonStr,String userId,String token);
+    public Object doSaveVipVisitorsInfo(String jsonStr,String userId,String token);
     
     /**
      * VIP模板导出接口
      * @return
      */
-    public Object doExportVIPVisitorsTemplateInfo(HttpServletResponse response);
+    public void doExportVipVisitorsTemplateInfo(HttpServletResponse response);
     
     /**
      * VIP游客信息导入接口
      * @return
      */
-    public Object doImportVIPVisitorsInfo(MultipartFile file,String token,String userId);
+    public Object doImportVipVisitorsInfo(MultipartFile file,String token,String userId);
     
     /**
      * 游客信息修改初始化接口
@@ -179,5 +179,5 @@ public interface VisitorsService extends BaseService<Visitors>{
      * @return
      * 	2018-10-24 Diego.zhou 新建
      */
-    public Object doSelctVisitorsRentHistoryInfo(HttpServletRequest request, HttpServletResponse response,String visitorsId,String userId,String token);
+    public Object doSelectVisitorsRentHistoryInfo(HttpServletRequest request, HttpServletResponse response,String visitorsId,String userId,String token);
 }

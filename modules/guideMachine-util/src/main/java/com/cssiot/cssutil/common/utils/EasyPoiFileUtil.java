@@ -17,6 +17,7 @@ import cn.afterturn.easypoi.excel.ExcelImportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * EasyPOI工具类
@@ -24,6 +25,7 @@ import cn.afterturn.easypoi.excel.entity.enmus.ExcelType;
  * 	2018-10-23 Diego.zhou 新建
  *
  */
+@Slf4j
 public class EasyPoiFileUtil {
 	
 	public static void exportExcel(List<?> list, String title, String sheetName, Class<?> pojoClass, String fileName,

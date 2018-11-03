@@ -15,6 +15,7 @@ import com.cssiot.cssbase.modules.sys.service.VisitorsService;
 import com.cssiot.cssutil.common.enums.ResultEnum;
 import com.cssiot.cssutil.common.utils.ResultUtil;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +27,7 @@ import io.swagger.annotations.ApiParam;
  * 	2018-10-23 Diego.zhou 新建
  *
  */
+@Api(value="游客管理相关接口")
 @RestController
 @RequestMapping("/visitors")
 public class VisitorsController {
@@ -38,9 +40,9 @@ public class VisitorsController {
 		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
 		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
 	})
-	@GetMapping("/doExportVIPVisitorsTemplateInfo/{token}/{loginName}")
-	public void doExportVIPVisitorsTemplateInfo(HttpServletResponse response,@PathVariable("token") String token,@PathVariable("userId")String userId) {
-		visitorsService.doExportVIPVisitorsTemplateInfo(response);
+	@GetMapping("/doExportVipVisitorsTemplateInfo/{token}/{userId}")
+	public void doExportVipVisitorsTemplateInfo(@PathVariable("token") String token,@PathVariable("userId")String userId,HttpServletResponse response) {
+		visitorsService.doExportVipVisitorsTemplateInfo(response);
 	}
 	
 	@ApiOperation("VIP游客数据导入接口")
@@ -48,9 +50,9 @@ public class VisitorsController {
 		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
 		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
 	})
-	@PostMapping(value = "/doImportVIPVisitorsInfo/{token}/{userId}", consumes = "multipart/*", headers = "content-type=multipart/form-data")
-	public Object doImportVIPVisitorsInfo(@ApiParam(value = "上传文件", required = true) MultipartFile file,@PathVariable("token") String token,@PathVariable("userId")String userId) {
-		Object result = visitorsService.doImportVIPVisitorsInfo(file, token, userId);
+	@PostMapping(value = "/doImportVipVisitorsInfo/{token}/{userId}", consumes = "multipart/*", headers = "content-type=multipart/form-data")
+	public Object doImportVipVisitorsInfo(@PathVariable("token") String token,@PathVariable("userId")String userId,@ApiParam(value = "上传文件", required = true) MultipartFile file) {
+		Object result = visitorsService.doImportVipVisitorsInfo(file, token, userId);
 		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
 	}
 	
@@ -73,16 +75,16 @@ public class VisitorsController {
 		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
 	}
 	
-	@ApiOperation("游客信息保存接口")
+	@ApiOperation("VIP游客信息新建保存接口")
 	@ApiImplicitParams({
 		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
 		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
 		@ApiImplicitParam(paramType="query",name="jsonStr",dataType="String",required=true,value="保存jsonStr:{visitors:{phone:'手机号',identityCard:'身份证',vipRemark:'VIP说明'}}"),
 	})
 	@SuppressWarnings("all")
-	@PostMapping(value="/doSaveVIPVisitorsInfo/{token}/{userId}")
-	public Object doSaveVIPVisitorsInfo(@PathVariable("token") String token,@PathVariable("userId")String userId,String jsonStr){
-		Object result = visitorsService.doSaveVIPVisitorsInfo(jsonStr, userId, token);
+	@PostMapping(value="/doSaveVipVisitorsInfo/{token}/{userId}")
+	public Object doSaveVipVisitorsInfo(@PathVariable("token") String token,@PathVariable("userId")String userId,String jsonStr){
+		Object result = visitorsService.doSaveVipVisitorsInfo(jsonStr, userId, token);
 		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
 	}
 	
@@ -110,7 +112,7 @@ public class VisitorsController {
 	@SuppressWarnings("all")
 	@PostMapping(value="/doUpdateVisitorsInfo/{token}/{userId}")
 	public Object doUpdateVisitorsInfo(@PathVariable("token") String token,@PathVariable("userId")String userId,String jsonStr){
-		Object result = visitorsService.doSaveVIPVisitorsInfo(jsonStr, userId, token);
+		Object result = visitorsService.doUpdateVisitorsInfo(jsonStr, userId, token);
 		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
 	}
 	
@@ -173,9 +175,9 @@ public class VisitorsController {
 		@ApiImplicitParam(paramType="query",name="visitorsId",dataType="String",required=true,value="游客Id"),
 	})
 	@SuppressWarnings("all")
-	@PostMapping(value="/doSelctVisitorsRentHistoryInfo/{token}/{userId}")
-	public Object doSelctVisitorsRentHistoryInfo(@PathVariable("token") String token,@PathVariable("userId")String userId,HttpServletRequest request, HttpServletResponse response,String visitorsId){
-		Object result = visitorsService.doSelctVisitorsRentHistoryInfo(request, response, visitorsId, userId, token);
+	@PostMapping(value="/doSelectVisitorsRentHistoryInfo/{token}/{userId}")
+	public Object doSelectVisitorsRentHistoryInfo(@PathVariable("token") String token,@PathVariable("userId")String userId,HttpServletRequest request, HttpServletResponse response,String visitorsId){
+		Object result = visitorsService.doSelectVisitorsRentHistoryInfo(request, response, visitorsId, userId, token);
 		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
 	}
 	

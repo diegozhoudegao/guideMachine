@@ -5,14 +5,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cssiot.cssbase.modules.quartz.data.MessageRemindModel;
-import com.cssiot.cssbase.modules.quartz.service.SendMessageRemindService;
-import com.cssiot.cssutil.common.enums.MessageRemindSendTypeEnum;
+import com.cssiot.cssbase.modules.quartz.service.ScheduleCronJobService;
 
 /**
  * 测试定时
@@ -25,18 +21,18 @@ import com.cssiot.cssutil.common.enums.MessageRemindSendTypeEnum;
 public class QuartzTestController {
 
 	@Autowired
-	private SendMessageRemindService sendMessageRemindService;
+	private ScheduleCronJobService sendMessageRemindService;
 	
-	@GetMapping("/testQuartz/{time}")
-	public String testQuartz(@PathVariable String time) {
-		MessageRemindModel jsonModel = new MessageRemindModel();
-		jsonModel.setSendType(MessageRemindSendTypeEnum.ONCE.getCode());//重复执行
-		jsonModel.setRemindTime(time);
-		jsonModel.setMessageRemindId("MessageRemindId");
-		jsonModel.setCustomerId("CustomerId");
-		sendMessageRemindService.doSendMeassageRemind(jsonModel);
-		return "执行定时任务";
-	}
+//	@GetMapping("/testQuartz/{time}")
+//	public String testQuartz(@PathVariable String time) {
+//		MessageRemindModel jsonModel = new MessageRemindModel();
+//		jsonModel.setSendType(MessageRemindSendTypeEnum.ONCE.getCode());//重复执行
+//		jsonModel.setRemindTime(time);
+//		jsonModel.setMessageRemindId("MessageRemindId");
+//		jsonModel.setCustomerId("CustomerId");
+//		sendMessageRemindService.doSendMeassageRemind(jsonModel);
+//		return "执行定时任务";
+//	}
 	
 	public static void main(String[] args) throws ParseException {
 		long nextFireTime = Long.valueOf("1539702899000");

@@ -52,48 +52,41 @@ public class LoginController {
 	
 	/**
 	 * 登录认证接口
-	 * @param clientType 客户端类型(android/ios/web等)
-	 * @param phone 手机号
+	 * @param loginName 账号
 	 * @param password 密码
 	 * @param request
 	 * @author 
 	 * 	2017-11-25 athena 新建
 	 * 	2018-01-02 athena 增加用户头像查询
+	 * 	2018-11-04 Diego.zhou 修改传参以及校验方法
 	 */
 	@ApiOperation("登录认证接口")
 	@ApiImplicitParams({
-		@ApiImplicitParam(paramType="path",name="clientType",dataType="String",required=true,value="客户端类型"),
-		@ApiImplicitParam(paramType="query",name="phone",dataType="String",required=true,value="手机号"),
+		@ApiImplicitParam(paramType="query",name="loginName",dataType="String",required=true,value="账号"),
 		@ApiImplicitParam(paramType="query",name="password",dataType="String",required=true,value="密码"),
-		@ApiImplicitParam(paramType="query",name="customerId",dataType="String",required=true,value="客户id")
 	})
 	@SuppressWarnings("all")
-	@PostMapping(value="/login/{clientType}")
-	public Object login(@PathVariable("clientType") String clientType,@RequestParam("phone") String phone,@RequestParam("password") String password,@RequestParam("customerId") String customerId,HttpServletRequest request) {
-		if(ChkUtil.isEmpty(phone)) {
+	@PostMapping(value="/login")
+	public Object login(@RequestParam("loginName") String loginName,@RequestParam("password") String password,HttpServletRequest request) {
+		if(ChkUtil.isEmpty(loginName)) {
 			log.warn("登录校验={}",ResultEnum.PHONE_NULL.getMessage());
-			throw new ResultException(ResultEnum.PHONE_NULL,null,phone,clientType);
-		}
-		if(ChkUtil.isEmpty(customerId)) {
-			log.warn("登录校验={}",ResultEnum.COMPANYID_NULL.getMessage());
-			throw new ResultException(ResultEnum.COMPANYID_NULL,null,phone,clientType);
+			throw new ResultException(ResultEnum.PHONE_NULL,null,null,null);
 		}
 		Parameter parameter =new Parameter();
-		parameter.put("phone", phone);
-		parameter.put("customerId", customerId);
-		User user=(User)userService.getByHql(" from User where customerId=:customerId and (userId=:phone or phone=:phone) and (state='"+StateEnum.NEWSTATE.getCode()+"' or state='"+StateEnum.ADMINSTATE.getCode()+"')",parameter);
+		parameter.put("loginName", loginName);
+		User user=(User)userService.getByHql(" from User where state='"+StateEnum.NEWSTATE.getCode()+"' and loginName=:loginName",parameter);
 		if(ChkUtil.isEmptyAllObject(user)){
 			log.warn("登录校验={}",ResultEnum.CUSTOMER_USERNOTEXIST.getMessage());
-			throw new ResultException(ResultEnum.CUSTOMER_USERNOTEXIST,null,phone,clientType);
+			throw new ResultException(-2, "账号不存在", null, null, null);
 		}
 		if(!user.getPassword().equals(password)){
 			log.warn("登录校验={}",ResultEnum.PASSWORD_ERROR.getMessage());
-			throw new ResultException(ResultEnum.PASSWORD_ERROR,null,user.getId(),clientType);
+			throw new ResultException(ResultEnum.PASSWORD_ERROR,null,null,null);
 		}
-		LoginUserModel 	loginUserModel = getLoginUserModel(clientType, user, request);
+		LoginUserModel 	loginUserModel = getLoginUserModel("web", user, request);
 		Map map = new HashMap<>();
 		map.put("loginUserModel", loginUserModel);
-		return ResultUtil.success(map, ResultEnum.SUCCESS, loginUserModel.getToken(), user.getId(), clientType);
+		return ResultUtil.success(map, ResultEnum.SUCCESS, loginUserModel.getToken(), user.getId(), null);
 	}
 	
 	/**
@@ -122,59 +115,48 @@ public class LoginController {
 	
 	/**
 	 * 登录退出接口
-	 * @param clientType 客户端类型(android/ios/web等)
-	 * @param token 安全令牌
 	 * @param userId 当前登录者Id
 	 * @author 
 	 * 	2018-10-09 athena 迁移
+	 * 	2018-11-04 Diego.zhou 修改传参以及校验方法
 	 */
 	@ApiOperation("登录退出接口")
 	@ApiImplicitParams({
-		@ApiImplicitParam(paramType="path",name="clientType",dataType="String",required=true,value="客户端类型"),
 		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
 		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
 	})
-	@PostMapping(value="/logout/{clientType}/{token}/{userId}")
-	public Object logout(@PathVariable("userId") String userId,@PathVariable("token") String token,@PathVariable("clientType") String clientType) throws Exception {
+	@PostMapping(value="/logout/{token}/{userId}")
+	public Object logout(@PathVariable("userId") String userId,@PathVariable("token") String token) throws Exception {
 		User user=userService.get(userId);
 		if(user==null) {
 			log.warn("退出登录={}",ResultEnum.USER_ERROR.getMessage());
-			return ResultUtil.error4008(ResultEnum.USER_ERROR, token, userId, clientType);
+			return ResultUtil.error4008(ResultEnum.USER_ERROR, token, userId, null);
 		}
-		if(!ChkUtil.isEmptyAllObject(clientType) && clientType.toLowerCase().equals("web")) {//WEB
-			if(redisTemplate.hasKey(String.format(RedisConstant.WEB_TOKEN_PREFIX, user.getId()))) {
-				redisTemplate.opsForValue().getOperations().delete(String.format(RedisConstant.WEB_TOKEN_PREFIX,user.getId()));
-			}else {
-				return ResultUtil.error4008(ResultEnum.REDIS_NULL, token, userId, clientType);
-			}
-		}else {//APP
-			if(redisTemplate.hasKey(String.format(RedisConstant.APP_TOKEN_PREFIX, user.getId()))) {
-				redisTemplate.opsForValue().getOperations().delete(String.format(RedisConstant.APP_TOKEN_PREFIX,user.getId()));
-			}else {
-				return ResultUtil.error4008(ResultEnum.REDIS_NULL, token, userId, clientType);
-			}
+		if(redisTemplate.hasKey(String.format(RedisConstant.WEB_TOKEN_PREFIX, user.getId()))) {
+			redisTemplate.opsForValue().getOperations().delete(String.format(RedisConstant.WEB_TOKEN_PREFIX,user.getId()));
+		}else {
+			return ResultUtil.error4008(ResultEnum.REDIS_NULL, token, userId, null);
 		}
-		return ResultUtil.success(null, ResultEnum.SUCCESS, null, userId, clientType);
+		return ResultUtil.success(null, ResultEnum.SUCCESS, null, userId, null);
 	}
 	
 	/**
 	 * 获取用户对应树菜单接口
-	 * @param clientType 客户端类型(android/ios/web等)
 	 * @param token 安全令牌
 	 * @param userId 当前登录者Id
 	 * @author 
 	 * 	2017-11-15 athena 迁移
+	 * 	2018-11-04 Diego.zhou 修改传参以及校验方法
 	 */
 	@ApiOperation("获取用户对应树菜单接口")
 	@ApiImplicitParams({
-		@ApiImplicitParam(paramType="path",name="clientType",dataType="String",required=true,value="客户端类型"),
 		@ApiImplicitParam(paramType="path",name="token",dataType="String",required=true,value="安全令牌"),
 		@ApiImplicitParam(paramType="path",name="userId",dataType="String",required=true,value="当前登录者Id"),
 	})
-	@PostMapping(value="/getTreeText/{clientType}/{token}/{userId}")
-	public Object getTreeText(@PathVariable("userId") String userId,@PathVariable("token") String token,@PathVariable("clientType") String clientType) throws Exception {
-		Object result = userTreeService.getTreeText(userId, token, clientType);
-		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, clientType);
+	@PostMapping(value="/getTreeText/{token}/{userId}")
+	public Object getTreeText(@PathVariable("userId") String userId,@PathVariable("token") String token) throws Exception {
+		Object result = userTreeService.getTreeText(userId, token, null);
+		return ResultUtil.success(result, ResultEnum.SUCCESS, token, userId, null);
 	}
 	
 }
