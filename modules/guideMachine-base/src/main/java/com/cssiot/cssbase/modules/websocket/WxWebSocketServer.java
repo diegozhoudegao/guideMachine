@@ -19,8 +19,8 @@ import org.springframework.stereotype.Component;
  * 	2018--9-20 Diego.zhou 新建
  *
  */
-@ServerEndpoint("/wxWebsocket/{userCode}")
-@Component
+//@ServerEndpoint("/wxWebsocket/{userCode}")
+//@Component
 public class WxWebSocketServer {
 	// 静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
 	private static int onlineCount = 0;

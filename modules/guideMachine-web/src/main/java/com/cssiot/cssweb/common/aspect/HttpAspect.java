@@ -31,8 +31,8 @@ import lombok.extern.slf4j.Slf4j;
  * @author
  * 	2018-10-09 athena 迁移调整
  */
-@Aspect
-@Component
+//@Aspect
+//@Component
 @Slf4j
 public class HttpAspect {
 	
