@@ -74,7 +74,7 @@ public class LoginController {
 		}
 		Parameter parameter =new Parameter();
 		parameter.put("loginName", loginName);
-		User user=(User)userService.getByHql(" from User where state='"+StateEnum.NEWSTATE.getCode()+"' and loginName=:loginName",parameter);
+		User user=(User)userService.getByHql(" from User where status='"+StateEnum.NEWSTATE.getCode()+"' and loginName=:loginName",parameter);
 		if(ChkUtil.isEmptyAllObject(user)){
 			log.warn("登录校验={}",ResultEnum.CUSTOMER_USERNOTEXIST.getMessage());
 			throw new ResultException(-2, "账号不存在", null, null, null);
