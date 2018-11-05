@@ -46,4 +46,5 @@
 		</plugins>
 		<finalName>guideMachine</finalName>
 	</build>
+  	<packaging>war</packaging>
 </project>
